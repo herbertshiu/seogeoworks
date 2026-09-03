@@ -4,6 +4,11 @@ import {
   ArrowLeft,
   ArrowUpRight,
   Calculator,
+  ClipboardCheck,
+  Copy,
+  Download,
+  Printer,
+  Share2,
   TrendingUp,
   Check,
   ChevronRight,
@@ -58,6 +63,24 @@ const caseStudyPhases = [
   { number: "04", title: "Measure the echo", text: "The team paired traditional search data with citation checks, answer inclusion, sentiment, and qualified conversations to see what was compounding." },
 ];
 
+const auditGroups = [
+  { name: "Identity & expertise", description: "Can an answer engine tell who you are, what you know, and why you are credible?", checks: [
+    { id: "entity", title: "Our organization, people, and offers have consistent names across the web.", recommendation: "Create one canonical naming system for your brand, experts, products, and locations.", priority: "High" },
+    { id: "expert", title: "Important pages show a real author with relevant experience.", recommendation: "Add author bios, credentials, editorial ownership, and links to first-hand work.", priority: "High" },
+    { id: "about", title: "Our About page clearly explains our point of view and the problems we solve.", recommendation: "Rewrite the About page as a source of context, not only a company timeline.", priority: "Medium" },
+  ]},
+  { name: "Source quality", description: "Does your content give machines something specific and trustworthy to retrieve?", checks: [
+    { id: "evidence", title: "We publish original evidence, examples, or observations — not only summaries.", recommendation: "Turn internal knowledge, customer language, and research into named, quotable proof.", priority: "High" },
+    { id: "definitions", title: "Our key terms and category definitions are stated plainly.", recommendation: "Add a glossary or definition layer so important concepts resolve consistently.", priority: "Medium" },
+    { id: "freshness", title: "We have a visible process for reviewing and updating important sources.", recommendation: "Give cornerstone pages owners, review dates, and explicit update notes.", priority: "Medium" },
+  ]},
+  { name: "Reach & measurement", description: "Is your expertise corroborated outside your own domain and measured beyond rankings?", checks: [
+    { id: "distribution", title: "Trusted third-party sources mention or reference our expertise.", recommendation: "Build a distribution map across partners, communities, press, reviews, and events.", priority: "High" },
+    { id: "prompts", title: "We regularly test how answer engines describe and recommend our brand.", recommendation: "Create a repeatable prompt set and log inclusion, accuracy, and sentiment over time.", priority: "High" },
+    { id: "outcomes", title: "We connect visibility signals to qualified conversations or revenue.", recommendation: "Pair citation monitoring with CRM outcomes, assisted demand, and qualitative feedback.", priority: "Medium" },
+  ]},
+];
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
@@ -66,6 +89,9 @@ function App() {
   const [assessmentComplete, setAssessmentComplete] = useState(false);
   const [comparisonView, setComparisonView] = useState<"all" | "seo" | "geo">("all");
   const [roiInputs, setRoiInputs] = useState({ sessions: 18000, conversion: 2.4, value: 3200, lift: 28, investment: 4500 });
+  const [auditChecks, setAuditChecks] = useState<Record<string, boolean>>({});
+  const [auditReport, setAuditReport] = useState(false);
+  const [auditCopied, setAuditCopied] = useState(false);
 
   const handleSubscribe = () => setSubscribed(true);
   const currentQuestion = assessmentQuestions[assessmentStep];
@@ -87,6 +113,13 @@ function App() {
   const roiPayback = roi.monthlyImpact > 0 ? Math.max(1, Math.ceil(roiInputs.investment / roi.monthlyImpact)) : 0;
   const formatCurrency = (value: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
   const updateRoi = (key: keyof typeof roiInputs, value: number) => setRoiInputs((current) => ({ ...current, [key]: value }));
+  const allAuditChecks = auditGroups.flatMap((group) => group.checks);
+  const auditComplete = allAuditChecks.filter((check) => auditChecks[check.id]).length;
+  const auditScore = Math.round((auditComplete / allAuditChecks.length) * 100);
+  const auditLabel = auditScore < 40 ? "Early signal" : auditScore < 75 ? "Building signal" : "Ready to be cited";
+  const toggleAuditCheck = (id: string) => setAuditChecks((current) => ({ ...current, [id]: !current[id] }));
+  const resetAudit = () => { setAuditChecks({}); setAuditReport(false); setAuditCopied(false); };
+  const copyAuditSummary = async () => { await navigator.clipboard?.writeText(`Signal Room GEO audit: ${auditScore}% — ${auditLabel}. ${auditComplete}/${allAuditChecks.length} checks complete.`); setAuditCopied(true); setTimeout(() => setAuditCopied(false), 1800); };
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -100,7 +133,7 @@ function App() {
         <button className="mobile-menu" aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
         <button className="wordmark" onClick={() => scrollTo("top")}><span className="wordmark-dot" />signal<span>room</span></button>
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
-          <button onClick={() => scrollTo("briefings")}>Briefings</button><button onClick={() => scrollTo("compare")}>SEO vs GEO</button><button onClick={() => scrollTo("case-study")}>Case study</button><button onClick={() => scrollTo("roi")}>ROI calculator</button><button onClick={() => scrollTo("voices")}>Voices</button><button onClick={() => scrollTo("field-notes")}>Field notes</button><button onClick={() => scrollTo("about")}>About</button>
+          <button onClick={() => scrollTo("briefings")}>Briefings</button><button onClick={() => scrollTo("compare")}>SEO vs GEO</button><button onClick={() => scrollTo("case-study")}>Case study</button><button onClick={() => scrollTo("roi")}>ROI calculator</button><button onClick={() => scrollTo("audit")}>GEO audit</button><button onClick={() => scrollTo("voices")}>Voices</button><button onClick={() => scrollTo("field-notes")}>Field notes</button><button onClick={() => scrollTo("about")}>About</button>
         </nav>
         <button className="header-cta" onClick={handleSubscribe}>{subscribed ? "You’re in" : "Get the signal"}<ArrowUpRight size={16} /></button>
       </header>
@@ -124,6 +157,8 @@ function App() {
         <section id="case-study" className="case-study-section"><div className="case-study-intro"><div><div className="eyebrow"><span className="eyebrow-line" /> Case study / 01</div><h2>From <em>missing</em><br />to mentioned.</h2></div><div className="case-study-context"><span>Illustrative composite</span><p>How a specialist brand rebuilt its search presence to become a more useful, citable source for answer engines.</p></div></div><div className="case-study-layout"><div className="case-study-result"><div className="result-label">Harbor & Co.<br /><span>Specialist advisory firm</span></div><div className="result-quote">“We stopped trying to sound like the category. We started documenting why we see it differently.”</div><div className="case-metrics"><div><strong>+3.4×</strong><span>qualified mentions</span></div><div><strong>+68%</strong><span>answer inclusion</span></div><div><strong>−41%</strong><span>thin-content footprint</span></div></div><div className="result-footnote">Directional results after a 6-month migration program</div></div><div className="case-study-steps">{caseStudyPhases.map((phase) => <article className="case-step" key={phase.number}><span className="case-step-number">{phase.number}</span><div><h3>{phase.title}</h3><p>{phase.text}</p></div><ArrowUpRight size={16} /></article>)}</div></div><div className="case-study-takeaway"><span><Sparkles size={16} /> The optimization principle</span><strong>Make the brand easier to recognize in isolation — and easier to recommend in context.</strong><button className="text-button" onClick={() => scrollTo("assessment")}>Find your gap <ArrowUpRight size={16} /></button></div></section>
 
         <section id="roi" className="roi-section"><div className="roi-header"><div><div className="eyebrow"><span className="eyebrow-line" /> Impact calculator</div><h2>What could a better<br /><em>answer footprint</em> be worth?</h2><p>Adjust the assumptions to sketch the business case for moving from traffic-first SEO to a more visible, citable GEO presence.</p></div><div className="roi-icon"><Calculator size={28} /></div></div><div className="roi-layout"><div className="roi-inputs"><div className="roi-input-head"><span>Your assumptions</span><small>Move the sliders</small></div>{([ ["sessions", "Monthly organic sessions", roiInputs.sessions, 1000, 100000, 1000, (v: number) => v.toLocaleString()], ["conversion", "Qualified conversion rate", roiInputs.conversion, 0.5, 8, 0.1, (v: number) => `${v.toFixed(1)}%`], ["value", "Average customer value", roiInputs.value, 500, 15000, 100, (v: number) => formatCurrency(v)], ["lift", "Estimated GEO lift", roiInputs.lift, 5, 80, 1, (v: number) => `${v}%`], ["investment", "Monthly GEO investment", roiInputs.investment, 1000, 20000, 500, (v: number) => formatCurrency(v)] ] as const).map(([key, label, value, min, max, step, display]) => <label className="roi-control" key={key}><span><b>{label}</b><strong>{display(value)}</strong></span><input type="range" min={min} max={max} step={step} value={value} onChange={(event) => updateRoi(key, Number(event.target.value))} /></label>)}<small className="roi-disclaimer">Planning estimate only. Replace the assumptions with your own funnel data before making investment decisions.</small></div><div className="roi-output"><div className="roi-output-label"><TrendingUp size={16} /> Estimated monthly impact</div><strong className="roi-value">{formatCurrency(roi.monthlyImpact)}</strong><p>Potential incremental revenue influenced by additional qualified demand.</p><div className="roi-stat-grid"><div><span>Incremental leads</span><b>+{roi.incrementalLeads.toLocaleString()}</b><small>/ month</small></div><div><span>Annualized upside</span><b>{formatCurrency(roi.monthlyImpact * 12)}</b><small>/ year</small></div><div><span>Payback horizon</span><b>{roiPayback} mo</b><small>at this lift</small></div></div><div className="roi-formula"><span>Model logic</span><p>{roi.currentLeads.toLocaleString()} current leads × {roiInputs.lift}% lift × {formatCurrency(roiInputs.value)} value</p></div><button className="button-primary" onClick={() => scrollTo("assessment")}>Pressure-test your readiness <ArrowUpRight size={16} /></button></div></div></section>
+
+        <section id="audit" className="audit-section"><div className="audit-header"><div><div className="eyebrow"><span className="eyebrow-line" /> Audit generator</div><h2>Turn a vague<br /><em>gap into a plan.</em></h2><p>Work through nine practical GEO signals, mark what is already true, and generate a shareable snapshot of where to focus next.</p></div><div className="audit-summary"><div className="audit-score-ring" style={{ background: `conic-gradient(var(--lime) ${auditScore * 3.6}deg, #313a2d 0deg)` }}><div><strong>{auditScore}</strong><span>%</span></div></div><span>{auditLabel}</span></div></div>{!auditReport ? <div className="audit-workspace"><div className="audit-groups">{auditGroups.map((group) => <div className="audit-group" key={group.name}><div className="audit-group-heading"><div><span>{group.name}</span><p>{group.description}</p></div><b>{group.checks.filter((check) => auditChecks[check.id]).length}/{group.checks.length}</b></div><div className="audit-checks">{group.checks.map((check) => <button className={auditChecks[check.id] ? "audit-check checked" : "audit-check"} key={check.id} onClick={() => toggleAuditCheck(check.id)}><span className="check-box">{auditChecks[check.id] && <Check size={13} />}</span><span className="check-copy"><b>{check.title}</b><small><i className={check.priority === "High" ? "priority-high" : "priority-medium"}>{check.priority} priority</i> · {check.recommendation}</small></span></button>)}</div></div>)}</div><div className="audit-sidecard"><ClipboardCheck size={23} /><span>GEO readiness snapshot</span><strong>{auditComplete} <small>of {allAuditChecks.length}</small></strong><p>Complete the checks that are already part of your operating system. Your unfinished items become your action queue.</p><button className="button-primary" disabled={auditComplete === 0} onClick={() => setAuditReport(true)}>Generate audit report <ArrowUpRight size={16} /></button><small className="audit-side-note">Your answers stay in this browser session.</small></div></div> : <div className="audit-report"><div className="report-topline"><span><Check size={14} /> Report generated</span><div><button onClick={copyAuditSummary}><Copy size={14} /> {auditCopied ? "Copied" : "Copy summary"}</button><button onClick={() => window.print()}><Printer size={14} /> Print</button></div></div><div className="report-hero"><div><span className="report-kicker">Signal Room / GEO audit</span><h3>Your operating signal is <em>{auditLabel.toLowerCase()}</em>.</h3><p>You have marked <strong>{auditComplete} of {allAuditChecks.length}</strong> foundational signals as in place. The next gains are likely to come from the unchecked items below.</p></div><div className="report-score"><strong>{auditScore}</strong><span>/ 100</span></div></div><div className="report-breakdown">{auditGroups.map((group) => <div key={group.name}><span>{group.name}</span><b>{Math.round((group.checks.filter((check) => auditChecks[check.id]).length / group.checks.length) * 100)}%</b><i><em style={{ width: `${(group.checks.filter((check) => auditChecks[check.id]).length / group.checks.length) * 100}%` }} /></i></div>)}</div><div className="report-priority"><div><span>Recommended next focus</span><h4>{allAuditChecks.find((check) => !auditChecks[check.id])?.title ?? "Keep testing and refreshing your signal set."}</h4><p>{allAuditChecks.find((check) => !auditChecks[check.id])?.recommendation ?? "Build a regular review loop so the system stays legible as your market evolves."}</p></div><button className="reset-button" onClick={resetAudit}><RotateCcw size={15} /> Re-run audit</button></div></div>}</section>
 
         <section id="briefings" className="section block-section"><div className="section-heading"><div><div className="eyebrow"><span className="eyebrow-line" /> Featured briefing</div><h2>What’s worth<br /><em>knowing now.</em></h2></div><button className="circle-link" onClick={() => scrollTo("field-notes")}><ArrowUpRight size={19} /></button></div><div className="briefing-card"><div className="briefing-card-art"><div className="art-label">THE NEW<br />DISCOVERABILITY</div><div className="art-ring ring-a" /><div className="art-ring ring-b" /><div className="art-cross">+</div><span className="art-number">01</span></div><div className="briefing-content"><div className="content-meta"><span>Long read</span><span>12 min · By Aisha Khan</span></div><h3>From ranking to resonance: <em>the new job of SEO</em></h3><p>The old playbook was built for a list of blue links. The next one is built for the moment someone asks, “Who should I trust?”</p><button className="read-link">Read the briefing <ArrowUpRight size={17} /></button></div></div></section>
 
