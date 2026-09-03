@@ -40,12 +40,22 @@ const assessmentQuestions = [
 
 const scoreLabel = (score: number) => score < 40 ? "Signal forming" : score < 70 ? "Signal building" : "Signal leading";
 
+const comparisonRows = [
+  { lens: "Primary outcome", seo: "Earn the click", geo: "Earn the inclusion", gap: "A strong ranking can still be invisible when an answer engine summarizes the category without you." },
+  { lens: "Core asset", seo: "A page optimized for a query", geo: "A source with a clear point of view", gap: "Keyword coverage without original expertise gives machines little reason to select your brand." },
+  { lens: "Authority signal", seo: "Links, relevance, and domain strength", geo: "Named experts, corroboration, and recognizable entities", gap: "Backlinks help establish importance; they do not automatically establish what your brand knows." },
+  { lens: "Content shape", seo: "Answer the query efficiently", geo: "Build context across related questions", gap: "A collection of isolated posts is harder to retrieve than a connected body of knowledge." },
+  { lens: "Distribution", seo: "Own the search results page", geo: "Show up in the wider information ecosystem", gap: "Your website is only one possible source. Community, press, partners, and reviews fill the gaps." },
+  { lens: "Measurement", seo: "Rankings, clicks, and conversions", geo: "Citations, mentions, sentiment, and qualified demand", gap: "Traffic can stay flat while influence grows — so the dashboard needs a wider field of view." },
+];
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [assessmentStep, setAssessmentStep] = useState(0);
   const [assessmentAnswers, setAssessmentAnswers] = useState<number[]>([]);
   const [assessmentComplete, setAssessmentComplete] = useState(false);
+  const [comparisonView, setComparisonView] = useState<"all" | "seo" | "geo">("all");
 
   const handleSubscribe = () => setSubscribed(true);
   const currentQuestion = assessmentQuestions[assessmentStep];
@@ -72,7 +82,7 @@ function App() {
         <button className="mobile-menu" aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
         <button className="wordmark" onClick={() => scrollTo("top")}><span className="wordmark-dot" />signal<span>room</span></button>
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
-          <button onClick={() => scrollTo("briefings")}>Briefings</button><button onClick={() => scrollTo("voices")}>Voices</button><button onClick={() => scrollTo("field-notes")}>Field notes</button><button onClick={() => scrollTo("about")}>About</button>
+          <button onClick={() => scrollTo("briefings")}>Briefings</button><button onClick={() => scrollTo("compare")}>SEO vs GEO</button><button onClick={() => scrollTo("voices")}>Voices</button><button onClick={() => scrollTo("field-notes")}>Field notes</button><button onClick={() => scrollTo("about")}>About</button>
         </nav>
         <button className="header-cta" onClick={handleSubscribe}>{subscribed ? "You’re in" : "Get the signal"}<ArrowUpRight size={16} /></button>
       </header>
@@ -90,6 +100,8 @@ function App() {
         </section>
 
         <section className="ticker"><div className="ticker-label"><Sparkles size={15} /> In the room now</div><div className="ticker-track"><span>Search is a conversation</span><b>✳</b><span>Authority is earned in public</span><b>✳</b><span>Useful beats optimized</span><b>✳</b><span>Search is a conversation</span></div></section>
+
+        <section id="compare" className="comparison-section"><div className="comparison-heading"><div><div className="eyebrow"><span className="eyebrow-line" /> The strategy gap</div><h2>SEO gets you<br /><em>seen. GEO gets you chosen.</em></h2><p>Traditional search optimization and generative engine optimization share a foundation — but they win in different moments. Use this breakdown to spot where your playbook stops short.</p></div><div className="comparison-key"><span><i className="key-dot seo-dot" /> SEO</span><span><i className="key-dot geo-dot" /> GEO</span></div></div><div className="comparison-controls"><span>Compare by signal</span><div><button className={comparisonView === "all" ? "active" : ""} onClick={() => setComparisonView("all")}>All gaps</button><button className={comparisonView === "seo" ? "active" : ""} onClick={() => setComparisonView("seo")}>SEO lens</button><button className={comparisonView === "geo" ? "active" : ""} onClick={() => setComparisonView("geo")}>GEO lens</button></div></div><div className={`comparison-table view-${comparisonView}`}><div className="comparison-table-head"><span>Signal</span><span>Traditional SEO</span><span>Generative / GEO</span><span>Common gap</span></div>{comparisonRows.map((row, index) => <article className="comparison-row" key={row.lens}><div className="comparison-lens"><span>0{index + 1}</span><b>{row.lens}</b></div><div className="comparison-cell seo-cell"><i className="key-dot seo-dot" /><span>{row.seo}</span></div><div className="comparison-cell geo-cell"><i className="key-dot geo-dot" /><span>{row.geo}</span></div><div className="comparison-gap"><span>Watch for</span>{row.gap}</div></article>)}</div><div className="comparison-foot"><span><Target size={16} /> The bridge is not more content. It is <strong>more recognizable expertise.</strong></span><button className="text-button" onClick={() => scrollTo("assessment")}>Check your readiness <ArrowUpRight size={16} /></button></div></section>
 
         <section id="briefings" className="section block-section"><div className="section-heading"><div><div className="eyebrow"><span className="eyebrow-line" /> Featured briefing</div><h2>What’s worth<br /><em>knowing now.</em></h2></div><button className="circle-link" onClick={() => scrollTo("field-notes")}><ArrowUpRight size={19} /></button></div><div className="briefing-card"><div className="briefing-card-art"><div className="art-label">THE NEW<br />DISCOVERABILITY</div><div className="art-ring ring-a" /><div className="art-ring ring-b" /><div className="art-cross">+</div><span className="art-number">01</span></div><div className="briefing-content"><div className="content-meta"><span>Long read</span><span>12 min · By Aisha Khan</span></div><h3>From ranking to resonance: <em>the new job of SEO</em></h3><p>The old playbook was built for a list of blue links. The next one is built for the moment someone asks, “Who should I trust?”</p><button className="read-link">Read the briefing <ArrowUpRight size={17} /></button></div></div></section>
 
