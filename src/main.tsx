@@ -22,6 +22,7 @@ import {
   Sparkles,
   Target,
   RotateCcw,
+  Send,
   X,
 } from "lucide-react";
 import "./styles.css";
@@ -36,6 +37,13 @@ const notes = [
   { tag: "Field note 07", title: "The answer engine is not your enemy. Your blandness is.", date: "Sep 02, 2026", time: "6 min read", color: "blue" },
   { tag: "Playbook 04", title: "How to write a source an AI can confidently cite", date: "Aug 28, 2026", time: "9 min read", color: "yellow" },
   { tag: "Signal check", title: "Brand demand is moving from clicks to context", date: "Aug 19, 2026", time: "4 min read", color: "pink" },
+];
+
+const researchPosts = [
+  { category: "GEO research", type: "Deep dive", title: "The citation layer: what answer engines need before they trust a brand", excerpt: "A practical field guide to source quality, corroboration, and the signals that turn content into usable context.", date: "Sep 05, 2026", read: "14 min", tone: "research-lime" },
+  { category: "Expert insight", type: "Conversation", title: "Samantha Li on the difference between being visible and being useful", excerpt: "A search strategist on why the best GEO work starts with sharper opinions, not more output.", date: "Sep 01, 2026", read: "8 min", tone: "research-coral" },
+  { category: "SEO / GEO", type: "Field note", title: "From keyword clusters to context graphs", excerpt: "What changes when the unit of optimization is no longer the page, but the relationship between ideas.", date: "Aug 25, 2026", read: "11 min", tone: "research-blue" },
+  { category: "Expert insight", type: "Briefing", title: "Why third-party proof is becoming part of your owned strategy", excerpt: "The distribution moves that help a brand become recognizable beyond its own domain.", date: "Aug 17, 2026", read: "7 min", tone: "research-violet" },
 ];
 
 const assessmentQuestions = [
@@ -86,6 +94,8 @@ const auditGroups = [
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [researchFilter, setResearchFilter] = useState("All");
   const [theme, setTheme] = useState<"dark" | "light">(() => (localStorage.getItem("signal-room-theme") as "dark" | "light") || "dark");
 
   useEffect(() => {
@@ -102,6 +112,8 @@ function App() {
   const [auditCopied, setAuditCopied] = useState(false);
 
   const handleSubscribe = () => setSubscribed(true);
+  const handleNewsletterSubmit = (event: React.FormEvent<HTMLFormElement>) => { event.preventDefault(); if (newsletterEmail.trim()) setSubscribed(true); };
+  const filteredResearch = researchFilter === "All" ? researchPosts : researchPosts.filter((post) => post.category === researchFilter);
   const currentQuestion = assessmentQuestions[assessmentStep];
   const seoScore = Math.round((assessmentAnswers.reduce((total, answer, index) => total + (assessmentQuestions[index]?.seo[answer] ?? 0), 0) / (assessmentQuestions.length * 3)) * 100);
   const geoScore = Math.round((assessmentAnswers.reduce((total, answer, index) => total + (assessmentQuestions[index]?.geo[answer] ?? 0), 0) / (assessmentQuestions.length * 3)) * 100);
@@ -141,7 +153,7 @@ function App() {
         <button className="mobile-menu" aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
         <button className="wordmark" onClick={() => scrollTo("top")}><span className="wordmark-dot" />signal<span>room</span></button>
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
-          <button onClick={() => scrollTo("briefings")}>Briefings</button><button onClick={() => scrollTo("compare")}>SEO vs GEO</button><button onClick={() => scrollTo("case-study")}>Case study</button><button onClick={() => scrollTo("roi")}>ROI calculator</button><button onClick={() => scrollTo("audit")}>GEO audit</button><button onClick={() => scrollTo("voices")}>Voices</button><button onClick={() => scrollTo("field-notes")}>Field notes</button><button onClick={() => scrollTo("about")}>About</button>
+          <button onClick={() => scrollTo("briefings")}>Briefings</button><button onClick={() => scrollTo("compare")}>SEO vs GEO</button><button onClick={() => scrollTo("case-study")}>Case study</button><button onClick={() => scrollTo("roi")}>ROI calculator</button><button onClick={() => scrollTo("audit")}>GEO audit</button><button onClick={() => scrollTo("voices")}>Voices</button><button onClick={() => scrollTo("field-notes")}>Field notes</button><button onClick={() => scrollTo("research-desk")}>Research desk</button><button onClick={() => scrollTo("about")}>About</button>
         </nav>
         <div className="header-actions"><button className="theme-toggle" aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`} onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>{theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}<span>{theme === "dark" ? "Light" : "Dark"}</span></button><button className="header-cta" onClick={handleSubscribe}>{subscribed ? "You’re in" : "Get the signal"}<ArrowUpRight size={16} /></button></div>
       </header>
@@ -174,9 +186,11 @@ function App() {
 
         <section id="field-notes" className="section notes-section"><div className="section-heading compact"><div><div className="eyebrow"><span className="eyebrow-line" /> Dispatches</div><h2>Small notes.<br /><em>Sharp edges.</em></h2></div><button className="filter-button"><span>All topics</span><ChevronRight size={15} /></button></div><div className="notes-list">{notes.map((note, index) => <article className="note-row" key={note.title}><div className={`note-index ${note.color}`}>0{index + 1}</div><div className="note-main"><span className="note-tag">{note.tag}</span><h3>{note.title}</h3></div><div className="note-meta"><span>{note.date}</span><span><Clock3 size={14} /> {note.time}</span></div><button className="note-arrow" aria-label={`Read ${note.title}`}><ArrowUpRight size={18} /></button></article>)}</div></section>
 
+        <section id="research-desk" className="research-section"><div className="section-heading compact"><div><div className="eyebrow"><span className="eyebrow-line" /> Research desk</div><h2>Latest thinking.<br /><em>Sharper signals.</em></h2></div><p className="section-intro">A living library for GEO research, operator conversations, and the patterns worth carrying into your next brief.</p></div><div className="research-toolbar"><span>Browse the desk</span><div>{["All", "GEO research", "Expert insight", "SEO / GEO"].map((filter) => <button key={filter} className={researchFilter === filter ? "active" : ""} onClick={() => setResearchFilter(filter)}>{filter}</button>)}</div></div><div className="research-grid">{filteredResearch.map((post, index) => <article className={`research-card ${post.tone}`} key={post.title}><div className="research-card-top"><span>{post.type}</span><b>0{index + 1}</b></div><div className="research-card-art"><div className="research-art-line line-a" /><div className="research-art-line line-b" /><div className="research-art-dot" /></div><div className="research-card-copy"><span>{post.category} · {post.date}</span><h3>{post.title}</h3><p>{post.excerpt}</p><button className="read-link">Open piece <ArrowUpRight size={16} /></button></div></article>)}</div><div className="research-footer"><span><Send size={15} /> New: the research desk is updated with every issue.</span><button className="text-button" onClick={() => scrollTo("about")}>Get the weekly signal <ArrowUpRight size={16} /></button></div></section>
+
         <section id="assessment" className="assessment-section"><div className="assessment-header"><div><div className="eyebrow"><span className="eyebrow-line" /> Self-assessment</div><h2>Are you ready for<br /><em>the next search?</em></h2></div><div className="assessment-badge"><Target size={17} /> 6 signals · 3 min</div></div>{!assessmentComplete ? <div className="assessment-panel"><div className="assessment-progress"><span>0{assessmentStep + 1} / 0{assessmentQuestions.length}</span><div><i style={{ width: `${((assessmentStep) / assessmentQuestions.length) * 100}%` }} /></div><span>{currentQuestion.label}</span></div><h3>{currentQuestion.question}</h3><div className="answer-grid">{currentQuestion.options.map((option, index) => <button key={option} className="answer-card" onClick={() => answerAssessment(index)}><span>{String.fromCharCode(65 + index)}</span>{option}<ChevronRight size={17} /></button>)}</div><p className="assessment-note">Choose the answer that feels most true today. This is a directional signal, not a grade.</p></div> : <div className="assessment-result"><div className="result-intro"><span className="result-kicker"><Check size={14} /> Assessment complete</span><h3>Your signal is <em>{scoreLabel(Math.max(seoScore, geoScore)).toLowerCase()}</em>.</h3><p>Here’s where your discoverability system is strongest — and where a small, deliberate shift could compound.</p></div><div className="score-grid"><div className="score-card seo-score"><div className="score-ring" style={{ background: `conic-gradient(var(--lime) ${seoScore * 3.6}deg, #2b3025 0deg)` }}><div><strong>{seoScore}</strong><span>/ 100</span></div></div><div><b>SEO readiness</b><small>{scoreLabel(seoScore)}</small></div></div><div className="score-card geo-score"><div className="score-ring" style={{ background: `conic-gradient(var(--coral) ${geoScore * 3.6}deg, #392824 0deg)` }}><div><strong>{geoScore}</strong><span>/ 100</span></div></div><div><b>GEO readiness</b><small>{scoreLabel(geoScore)}</small></div></div></div><div className="result-footer"><span><Sparkles size={15} /> Your next move: make your expertise easier to <strong>recognize, retrieve, and repeat.</strong></span><button className="reset-button" onClick={resetAssessment}><RotateCcw size={15} /> Retake</button></div></div>}</section>
 
-        <section id="about" className="subscribe-section"><div className="subscribe-mark"><CircleArrowOutUpRight size={34} /></div><div><div className="eyebrow"><span className="eyebrow-line" /> The signal, delivered</div><h2>Good thinking,<br /><em>once a week.</em></h2><p>One thoughtful dispatch on SEO, GEO, and building a brand that machines can understand — and people can feel.</p></div><div className="subscribe-form"><div className="fake-input"><span>{subscribed ? "Welcome to the room." : "Your email address"}</span>{subscribed ? <Sparkles size={18} /> : <button aria-label="Subscribe" onClick={handleSubscribe}><ArrowUpRight size={20} /></button>}</div><small>{subscribed ? "Check your inbox for a welcome note." : "No noise. Unsubscribe whenever."}</small></div></section>
+        <section id="about" className="subscribe-section"><div className="subscribe-mark"><CircleArrowOutUpRight size={34} /></div><div><div className="eyebrow"><span className="eyebrow-line" /> The signal, delivered</div><h2>Good thinking,<br /><em>once a week.</em></h2><p>One thoughtful dispatch on SEO, GEO, and building a brand that machines can understand — and people can feel.</p></div><form className="subscribe-form" onSubmit={handleNewsletterSubmit}><div className="fake-input"><input aria-label="Email address" type="email" required placeholder="Your email address" value={newsletterEmail} onChange={(event) => setNewsletterEmail(event.target.value)} />{subscribed ? <Sparkles size={18} /> : <button type="submit" aria-label="Subscribe"><ArrowUpRight size={20} /></button>}</div><small>{subscribed ? "Welcome to the room. Check your inbox for a welcome note." : "No noise. Unsubscribe whenever."}</small></form></section>
       </main>
 
       <footer className="site-footer"><button className="wordmark footer-mark" onClick={() => scrollTo("top")}><span className="wordmark-dot" />signal<span>room</span></button><span>© 2026 Signal Room. Made for the curious.</span><div className="footer-links"><a href="#about">Instagram</a><a href="#about">LinkedIn</a><a href="#about">RSS</a></div></footer>
