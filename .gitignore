@@ -1,4 +1,5 @@
 node_modules/
 dist/
+signal-room-deck/
 .DS_Store
 *.local
