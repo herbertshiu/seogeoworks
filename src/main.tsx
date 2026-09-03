@@ -1,4 +1,4 @@
-import { StrictMode, useState } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowLeft,
@@ -15,7 +15,9 @@ import {
   CircleArrowOutUpRight,
   Clock3,
   Menu,
+  Moon,
   Play,
+  Sun,
   Search,
   Sparkles,
   Target,
@@ -84,6 +86,12 @@ const auditGroups = [
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">(() => (localStorage.getItem("signal-room-theme") as "dark" | "light") || "dark");
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("signal-room-theme", theme);
+  }, [theme]);
   const [assessmentStep, setAssessmentStep] = useState(0);
   const [assessmentAnswers, setAssessmentAnswers] = useState<number[]>([]);
   const [assessmentComplete, setAssessmentComplete] = useState(false);
@@ -135,7 +143,7 @@ function App() {
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
           <button onClick={() => scrollTo("briefings")}>Briefings</button><button onClick={() => scrollTo("compare")}>SEO vs GEO</button><button onClick={() => scrollTo("case-study")}>Case study</button><button onClick={() => scrollTo("roi")}>ROI calculator</button><button onClick={() => scrollTo("audit")}>GEO audit</button><button onClick={() => scrollTo("voices")}>Voices</button><button onClick={() => scrollTo("field-notes")}>Field notes</button><button onClick={() => scrollTo("about")}>About</button>
         </nav>
-        <button className="header-cta" onClick={handleSubscribe}>{subscribed ? "You’re in" : "Get the signal"}<ArrowUpRight size={16} /></button>
+        <div className="header-actions"><button className="theme-toggle" aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`} onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>{theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}<span>{theme === "dark" ? "Light" : "Dark"}</span></button><button className="header-cta" onClick={handleSubscribe}>{subscribed ? "You’re in" : "Get the signal"}<ArrowUpRight size={16} /></button></div>
       </header>
 
       <main id="top">
