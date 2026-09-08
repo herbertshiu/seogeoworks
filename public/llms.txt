@@ -1,0 +1,18 @@
+# Signal Room
+
+> An independent field guide to SEO, GEO, and the people reshaping how brands get found, understood, and remembered.
+
+## Purpose
+
+Signal Room helps operators understand the gap between traditional SEO (being seen) and generative engine optimization (being chosen), then turn that gap into a practical plan.
+
+## Core topics
+
+- SEO vs GEO: where ranking and answer inclusion diverge
+- Citation readiness: named experts, evidence, and machine-readable context
+- Readiness audits and self-assessments for search visibility systems
+- Field notes and research desk briefings for modern search
+
+## Primary source
+
+- [Signal Room](https://www.seogeoworks.hk/)
