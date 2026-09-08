@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useState } from "react";
+import { StrictMode, useEffect, useState, type MouseEvent } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowLeft,
@@ -159,14 +159,33 @@ function App() {
     setMenuOpen(false);
   };
 
+  const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, id: string) => {
+    event.preventDefault();
+    scrollTo(id);
+  };
+
+  const navItems = [
+    ["briefings", copy.navBriefings],
+    ["compare", copy.navCompare],
+    ["case-study", copy.navCase],
+    ["roi", copy.navRoi],
+    ["audit", copy.navAudit],
+    ["voices", copy.navVoices],
+    ["field-notes", copy.navNotes],
+    ["research-desk", copy.navResearch],
+    ["about", copy.navAbout],
+  ] as const;
+
   return (
     <div className="site-shell">
       <div className="top-strip"><span>Independent research for the discoverability era</span><span>Issue 01 · September 2026</span></div>
       <header className="site-header">
         <button className="mobile-menu" aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X size={22} /> : <Menu size={22} />}</button>
-        <button className="wordmark" onClick={() => scrollTo("top")}><span className="wordmark-dot" />signal<span>room</span></button>
+        <a className="wordmark" href="https://www.seogeoworks.hk/" onClick={(event) => handleNavClick(event, "top")}><span className="wordmark-dot" />signal<span>room</span></a>
         <nav className={menuOpen ? "nav-links open" : "nav-links"}>
-          <button onClick={() => scrollTo("briefings")}>{copy.navBriefings}</button><button onClick={() => scrollTo("compare")}>{copy.navCompare}</button><button onClick={() => scrollTo("case-study")}>{copy.navCase}</button><button onClick={() => scrollTo("roi")}>{copy.navRoi}</button><button onClick={() => scrollTo("audit")}>{copy.navAudit}</button><button onClick={() => scrollTo("voices")}>{copy.navVoices}</button><button onClick={() => scrollTo("field-notes")}>{copy.navNotes}</button><button onClick={() => scrollTo("research-desk")}>{copy.navResearch}</button><button onClick={() => scrollTo("about")}>{copy.navAbout}</button>
+          {navItems.map(([id, label]) => (
+            <a key={id} href={`https://www.seogeoworks.hk/#${id}`} onClick={(event) => handleNavClick(event, id)}>{label}</a>
+          ))}
         </nav>
         <div className="header-actions"><label className="language-switcher" aria-label="Choose language"><Globe size={14} /><select value={language} onChange={(event) => setLanguage(event.target.value as keyof typeof uiCopy)}><option value="en">EN</option><option value="zhHans">简中</option><option value="zhHant">繁中</option></select></label><button className="theme-toggle" aria-label={`Switch to ${theme === "dark" ? copy.light : copy.dark} mode`} onClick={() => setTheme(theme === "dark" ? "light" : "dark")}>{theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}<span>{theme === "dark" ? copy.light : copy.dark}</span></button><button className="header-cta" onClick={handleSubscribe}>{subscribed ? copy.youIn : copy.getSignal}<ArrowUpRight size={16} /></button></div>
       </header>
@@ -206,7 +225,7 @@ function App() {
         <section id="about" className="subscribe-section"><div className="subscribe-mark"><CircleArrowOutUpRight size={34} /></div><div><div className="eyebrow"><span className="eyebrow-line" /> The signal, delivered</div><h2>{language === "en" ? <>Good thinking,<br /><em>once a week.</em></> : <>{copy.newsletterTitle}<br /><em>{copy.newsletterEm}</em></>}</h2><p>{copy.newsletterBody}</p></div><form className="subscribe-form" onSubmit={handleNewsletterSubmit}><div className="fake-input"><input aria-label={copy.email} type="email" required placeholder={subscribed ? copy.welcome : copy.email} value={newsletterEmail} onChange={(event) => setNewsletterEmail(event.target.value)} />{subscribed ? <Sparkles size={18} /> : <button type="submit" aria-label="Subscribe"><ArrowUpRight size={20} /></button>}</div><small>{subscribed ? "Welcome to the room. Check your inbox for a welcome note." : "No noise. Unsubscribe whenever."}</small></form></section>
       </main>
 
-      <footer className="site-footer"><button className="wordmark footer-mark" onClick={() => scrollTo("top")}><span className="wordmark-dot" />signal<span>room</span></button><span>© 2026 Signal Room. Made for the curious.</span><div className="footer-links"><a href="#about">Instagram</a><a href="#about">LinkedIn</a><a href="#about">RSS</a></div></footer>
+      <footer className="site-footer"><a className="wordmark footer-mark" href="https://www.seogeoworks.hk/" onClick={(event) => handleNavClick(event, "top")}><span className="wordmark-dot" />signal<span>room</span></a><span>© 2026 Signal Room. Made for the curious.</span><div className="footer-links"><a href="https://www.seogeoconsulting.hk/" rel="noopener noreferrer">Consulting</a><a href="https://itehk.com.hk/" rel="noopener noreferrer">Itehk</a><a href="https://www.seogeoworks.hk/llms.txt">llms.txt</a><a href="https://www.seogeoworks.hk/sitemap.xml">Sitemap</a></div></footer>
     </div>
   );
 }

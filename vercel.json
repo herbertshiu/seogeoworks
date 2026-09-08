@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "seogeoworks.hk" }],
+      "destination": "https://www.seogeoworks.hk/:path*",
+      "permanent": true
+    }
+  ]
+}
