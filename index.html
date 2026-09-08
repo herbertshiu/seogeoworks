@@ -9,6 +9,7 @@
     <link rel="canonical" href="https://www.seogeoworks.hk/" />
     <link rel="alternate" hreflang="en" href="https://www.seogeoworks.hk/" />
     <link rel="alternate" hreflang="x-default" href="https://www.seogeoworks.hk/" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.seogeoworks.hk/sitemap.xml" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Signal Room" />
     <meta property="og:url" content="https://www.seogeoworks.hk/" />
@@ -28,6 +29,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+    <style>
+      .static-crawl-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 18px;
+        padding: 18px 11vw 28px;
+        border-top: 1px solid #2a2d26;
+        background: #11120f;
+        color: #b0b2a7;
+        font: 13px/1.4 "DM Sans", sans-serif;
+      }
+      .static-crawl-footer a {
+        color: #d5f7ac;
+        text-decoration: none;
+      }
+      .static-crawl-footer a:hover {
+        text-decoration: underline;
+      }
+      html.js .static-crawl-footer {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -45,7 +76,11 @@
             "@id": "https://www.seogeoworks.hk/#organization",
             "name": "Signal Room",
             "url": "https://www.seogeoworks.hk/",
-            "logo": "https://www.seogeoworks.hk/favicon.png"
+            "logo": "https://www.seogeoworks.hk/favicon.png",
+            "sameAs": [
+              "https://www.seogeoconsulting.hk/",
+              "https://itehk.com.hk/"
+            ]
           }
         ]
       }
@@ -54,12 +89,26 @@
   </head>
   <body>
     <div id="root"></div>
+    <footer class="static-crawl-footer" aria-label="Related resources">
+      <a href="https://www.seogeoconsulting.hk/">SEO / GEO Consulting</a>
+      <a href="https://itehk.com.hk/">Itehk</a>
+      <a href="https://www.seogeoworks.hk/sitemap.xml">Sitemap</a>
+      <a href="https://www.seogeoworks.hk/llms.txt">llms.txt</a>
+      <a href="https://www.seogeoworks.hk/robots.txt">robots.txt</a>
+    </footer>
     <noscript>
       <main>
         <h1>Signal Room — SEO &amp; GEO field guide for modern search</h1>
         <p>Signal Room is an independent field guide to SEO, GEO, and the operators reshaping how brands get found, understood, and remembered. Explore briefings on search strategy, generative engine optimization, case studies, readiness audits, and practitioner voices.</p>
+        <p>
+          <a href="https://www.seogeoconsulting.hk/">SEO / GEO Consulting</a> ·
+          <a href="https://itehk.com.hk/">Itehk</a> ·
+          <a href="https://www.seogeoworks.hk/sitemap.xml">Sitemap</a> ·
+          <a href="https://www.seogeoworks.hk/llms.txt">llms.txt</a>
+        </p>
       </main>
     </noscript>
+    <script>document.documentElement.classList.add("js");</script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
