@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Signal Room field-guide articles for keyword targets.
+"""Generate seogeoworks field-guide articles for keyword targets.
 
 Every article is bilingual: English + Traditional Chinese (繁體中文), rendered
 side by side with a client-side language toggle (EN/中文). Each article gets a
@@ -148,7 +148,7 @@ def title_for(keyword: str, category: str) -> str:
     }
     t = themed.get(category, themed["general"])
     if len(t) > 70:
-        t = f"{kw} — Signal Room field guide"
+        t = f"{kw} — seogeoworks field guide"
     return t
 
 
@@ -195,15 +195,15 @@ def title_zh_for(keyword: str, category: str) -> str:
 
 def description_for(keyword: str, category: str) -> str:
     base = {
-        "seo": f"A practical Signal Room guide to {keyword}: what matters for rankings, citations, and qualified demand in Hong Kong and beyond.",
-        "kol": f"A Signal Room field note on {keyword}: how creator partnerships become recognizable, citable brand signals.",
-        "social": f"A Signal Room briefing on {keyword}: social distribution, proof, and measurement that survive algorithm changes.",
-        "it": f"A Signal Room guide to {keyword}: how to choose technical partners that keep search and product systems coherent.",
-        "design": f"A Signal Room look at {keyword}: visual systems, brand clarity, and the signals that make a company memorable.",
-        "logistics": f"A Signal Room briefing on {keyword}: operations that support ecommerce visibility and customer trust.",
-        "hr": f"A Signal Room guide to {keyword}: people infrastructure that keeps growth and brand delivery aligned.",
-        "agency": f"A Signal Room field guide to {keyword}: how to brief, compare, and measure marketing partners.",
-        "general": f"A Signal Room field guide to {keyword}: context, evaluation criteria, and next steps for operators.",
+        "seo": f"A practical seogeoworks guide to {keyword}: what matters for rankings, citations, and qualified demand in Hong Kong and beyond.",
+        "kol": f"A seogeoworks field note on {keyword}: how creator partnerships become recognizable, citable brand signals.",
+        "social": f"A seogeoworks briefing on {keyword}: social distribution, proof, and measurement that survive algorithm changes.",
+        "it": f"A seogeoworks guide to {keyword}: how to choose technical partners that keep search and product systems coherent.",
+        "design": f"A seogeoworks look at {keyword}: visual systems, brand clarity, and the signals that make a company memorable.",
+        "logistics": f"A seogeoworks briefing on {keyword}: operations that support ecommerce visibility and customer trust.",
+        "hr": f"A seogeoworks guide to {keyword}: people infrastructure that keeps growth and brand delivery aligned.",
+        "agency": f"A seogeoworks field guide to {keyword}: how to brief, compare, and measure marketing partners.",
+        "general": f"A seogeoworks field guide to {keyword}: context, evaluation criteria, and next steps for operators.",
     }
     d = base.get(category, base["general"])
     if len(d) < 120:
@@ -1204,7 +1204,7 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
     <link rel="alternate" hreflang="zh-Hant" href="{canonical}" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.seogeoworks.hk/sitemap.xml" />
     <meta property="og:type" content="article" />
-    <meta property="og:site_name" content="Signal Room" />
+    <meta property="og:site_name" content="seogeoworks" />
     <meta property="og:url" content="{canonical}" />
     <meta property="og:title" content="{escape(title)} | {escape(title_zh)}" />
     <meta property="og:description" content="{escape(description)} {escape(description_zh)}" />
@@ -1248,8 +1248,8 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
   </head>
   <body>
     <div class="wrap">
-      <div class="top"><a href="/">← Signal Room</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">中文</button><span>Field guide · {TODAY}</span></div>
-      <div class="eyebrow">Signal Room / {escape(category)} · {escape(CATEGORY_ZH.get(category, category))}</div>
+      <div class="top"><a href="/">← seogeoworks</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">中文</button><span>Field guide · {TODAY}</span></div>
+      <div class="eyebrow">seogeoworks / {escape(category)} · {escape(CATEGORY_ZH.get(category, category))}</div>
       <h1 data-lang="en">{escape(title)}</h1>
       <h1 data-lang="zh">{escape(title_zh)}</h1>
       <p class="lede" data-lang="en">{escape(description)}</p>
@@ -1265,8 +1265,8 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
         </ul>
       </aside>
       <footer>
-        <p data-lang="en">© {date.today().year} Signal Room. <a href="/">Home</a> · <a href="/articles/">All guides</a> · <a href="/sitemap.xml">Sitemap</a></p>
-        <p data-lang="zh">© {date.today().year} Signal Room。<a href="/">主頁</a> · <a href="/articles/">全部指南</a> · <a href="/sitemap.xml">Sitemap</a></p>
+        <p data-lang="en">© {date.today().year} seogeoworks. <a href="/">Home</a> · <a href="/articles/">All guides</a> · <a href="/sitemap.xml">Sitemap</a></p>
+        <p data-lang="zh">© {date.today().year} seogeoworks。<a href="/">主頁</a> · <a href="/articles/">全部指南</a> · <a href="/sitemap.xml">Sitemap</a></p>
       </footer>
     </div>
     {TOGGLE_JS}
@@ -1286,8 +1286,8 @@ def write_index(entries: list[dict]) -> None:
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>實地指南 Field guides — Signal Room</title>
-  <meta name="description" content="Signal Room bilingual (English / 繁體中文) field guides on SEO, GEO, KOL, marketing, and the operators reshaping how brands get found. 廣東話及英文雙語指南。" />
+  <title>實地指南 Field guides — seogeoworks</title>
+  <meta name="description" content="seogeoworks bilingual (English / 繁體中文) field guides on SEO, GEO, KOL, marketing, and the operators reshaping how brands get found. 廣東話及英文雙語指南。" />
   <link rel="canonical" href="https://www.seogeoworks.hk/articles/" />
   <link rel="icon" href="/favicon.ico" />
   <script src="https://analytics.ahrefs.com/analytics.js" data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>
@@ -1303,7 +1303,7 @@ def write_index(entries: list[dict]) -> None:
 </head>
 <body>
   <div class="wrap">
-    <p><a href="/">← Signal Room</a></p>
+    <p><a href="/">← seogeoworks</a></p>
     <h1>Field guides 實地指南</h1>
     <p>Eng/粵 · 共 {len(entries)} 篇雙語指南：搜尋、社交與現代品牌發現的實用筆記。</p>
     <ul>

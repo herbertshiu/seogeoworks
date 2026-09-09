@@ -1,10 +1,10 @@
-# Signal Room
+# seogeoworks
 
 > An independent field guide to SEO, GEO, and the people reshaping how brands get found, understood, and remembered.
 
 ## Purpose
 
-Signal Room helps operators understand the gap between traditional SEO (being seen) and generative engine optimization (being chosen), then turn that gap into a practical plan.
+seogeoworks helps operators understand the gap between traditional SEO (being seen) and generative engine optimization (being chosen), then turn that gap into a practical plan.
 
 ## Core topics
 
@@ -20,5 +20,5 @@ Browse the growing library at [Field guides](https://www.seogeoworks.hk/articles
 
 ## Primary source
 
-- [Signal Room](https://www.seogeoworks.hk/)
+- [seogeoworks](https://www.seogeoworks.hk/)
 - [All field guides](https://www.seogeoworks.hk/articles/)
