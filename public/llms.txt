@@ -12,7 +12,13 @@ Signal Room helps operators understand the gap between traditional SEO (being se
 - Citation readiness: named experts, evidence, and machine-readable context
 - Readiness audits and self-assessments for search visibility systems
 - Field notes and research desk briefings for modern search
+- Practical field guides for marketing, KOL, IT, and discovery queries
+
+## Field guides
+
+Browse the growing library at [Field guides](https://www.seogeoworks.hk/articles/).
 
 ## Primary source
 
 - [Signal Room](https://www.seogeoworks.hk/)
+- [All field guides](https://www.seogeoworks.hk/articles/)
