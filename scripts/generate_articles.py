@@ -99,10 +99,6 @@ def primary_title(keyword: str, category: str) -> str:
     return title_zh_for(keyword, category) if is_cjk(keyword) else title_for(keyword, category)
 
 
-def primary_description(keyword: str, category: str) -> str:
-    return description_zh_for(keyword, category) if is_cjk(keyword) else description_for(keyword, category)
-
-
 # ---------------------------------------------------------------------------
 # Intent detection
 # ---------------------------------------------------------------------------
@@ -216,6 +212,31 @@ def title_zh_for(keyword: str, category: str) -> str:
     return themed.get(category, themed["general"])
 
 
+def fit_meta_description(text: str, *, minimum: int = 70, maximum: int = 155) -> str:
+    """Keep meta descriptions above Ahrefs' short threshold and under the long cap."""
+    text = " ".join(text.split())
+    if len(text) >= minimum:
+        return clip(text, maximum)
+    cjk_chars = len(re.findall(r"[\u4e00-\u9fff]", text))
+    use_zh = cjk_chars >= max(1, len(text) // 4)
+    extras = (
+        [
+            "適合香港團隊比較供應商、釐清範圍與衡量成果時參考。",
+            "內容著重可執行準則與常見警示。",
+        ]
+        if use_zh
+        else [
+            "Written for Hong Kong operators comparing partners and measuring outcomes.",
+            "Focuses on practical criteria and common red flags.",
+        ]
+    )
+    for piece in extras:
+        if len(text) >= minimum:
+            break
+        text = f"{text} {piece}".strip()
+    return clip(text, maximum)
+
+
 def description_for(keyword: str, category: str) -> str:
     base = {
         "seo": f"A practical seogeoworks guide to {keyword}: what matters for rankings, citations, and qualified demand in Hong Kong and beyond.",
@@ -228,25 +249,27 @@ def description_for(keyword: str, category: str) -> str:
         "agency": f"A seogeoworks field guide to {keyword}: how to brief, compare, and measure marketing partners.",
         "general": f"A seogeoworks field guide to {keyword}: context, evaluation criteria, and next steps for operators.",
     }
-    d = base.get(category, base["general"])
-    if len(d) < 120:
-        d += " Written for teams who want clarity over hype."
-    return d[:160]
+    return base.get(category, base["general"])
 
 
 def description_zh_for(keyword: str, category: str) -> str:
     base = {
-        "seo": f"{keyword} 的實用指南：排名、引用與香港以至更遠地帶的合資格需求，哪些因素最要緊。",
-        "kol": f"{keyword} 的實地筆記：創作人合作如何成為可辨認、可引用的品牌訊號。",
-        "social": f"{keyword} 的工作簡報：經得起演算法變動的社交分發、證明與量度。",
-        "it": f"{keyword} 的指南：如何選擇令搜尋與產品系統保持一致的技術夥伴。",
-        "design": f"{keyword} 的觀點：視覺系統、品牌清晰度，以及令公司被記住的訊號。",
-        "logistics": f"{keyword} 的工作簡報：支持電子商貿能見度與顧客信任的營運。",
-        "hr": f"{keyword} 的指南：令增長與品牌交付保持一致的人力基建。",
-        "agency": f"{keyword} 的實地指南：如何簡報、比較與量度行銷夥伴。",
-        "general": f"{keyword} 的實地指南：給營運者的脈絡、評估準則與下一步。",
+        "seo": f"{keyword} 的實用指南：排名、引用與香港以至更遠地帶的合資格需求，哪些因素最要緊，以及如何核實供應商承諾。",
+        "kol": f"{keyword} 的實地筆記：創作人合作如何成為可辨認、可引用的品牌訊號，以及香港市場的收費與驗證方法。",
+        "social": f"{keyword} 的工作簡報：經得起演算法變動的社交分發、證明與量度，並附香港實務預算參考。",
+        "it": f"{keyword} 的指南：如何選擇令搜尋與產品系統保持一致的技術夥伴，並比較香港常見 SLA 與收費。",
+        "design": f"{keyword} 的觀點：視覺系統、品牌清晰度，以及令公司被記住的訊號；附香港設計項目的實務評估準則。",
+        "logistics": f"{keyword} 的工作簡報：支持電子商貿能見度與顧客信任的營運，涵蓋香港貨運與物流的關鍵檢查項。",
+        "hr": f"{keyword} 的指南：令增長與品牌交付保持一致的人力基建，適合香港公司比較外判與合規選項。",
+        "agency": f"{keyword} 的實地指南：如何簡報、比較與量度行銷夥伴，並避開香港市場常見的報價陷阱。",
+        "general": f"{keyword} 的實地指南：給營運者的脈絡、評估準則與下一步，協助你在香港市場做清晰決策。",
     }
     return base.get(category, base["general"])
+
+
+def primary_description(keyword: str, category: str) -> str:
+    raw = description_zh_for(keyword, category) if is_cjk(keyword) else description_for(keyword, category)
+    return fit_meta_description(raw)
 
 
 # ---------------------------------------------------------------------------
