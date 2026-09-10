@@ -4,21 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#11120f" />
-    <title>it service provider: how to verify and choose a partner in Hong Kong (2026 field guide) | it service provider：如何在香港查證並揀選合作夥伴（2026 年指南）</title>
-    <meta name="description" content="A seogeoworks guide to it service provider: how to choose technical partners that keep search and product systems coherent. it service provider 的指南：如何選擇令搜尋與產品系統保持一致的技術夥伴。" />
+    <title>it service provider: how to verify and choose a partner in…</title>
+    <meta name="description" content="A seogeoworks guide to it service provider: how to choose technical partners that keep search and product systems coherent." />
     <link rel="canonical" href="https://www.seogeoworks.hk/articles/it-service-provider.html" />
     <link rel="alternate" hreflang="en" href="https://www.seogeoworks.hk/articles/it-service-provider.html" />
-    <link rel="alternate" hreflang="zh-Hant" href="https://www.seogeoworks.hk/articles/it-service-provider.html" />
+    <link rel="alternate" hreflang="x-default" href="https://www.seogeoworks.hk/articles/it-service-provider.html" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.seogeoworks.hk/sitemap.xml" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="seogeoworks" />
     <meta property="og:url" content="https://www.seogeoworks.hk/articles/it-service-provider.html" />
-    <meta property="og:title" content="it service provider: how to verify and choose a partner in Hong Kong (2026 field guide) | it service provider：如何在香港查證並揀選合作夥伴（2026 年指南）" />
-    <meta property="og:description" content="A seogeoworks guide to it service provider: how to choose technical partners that keep search and product systems coherent. it service provider 的指南：如何選擇令搜尋與產品系統保持一致的技術夥伴。" />
+    <meta property="og:title" content="it service provider: how to verify and choose a partner in…" />
+    <meta property="og:description" content="A seogeoworks guide to it service provider: how to choose technical partners that keep search and product systems coherent." />
     <meta property="og:image" content="https://www.seogeoworks.hk/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="it service provider: how to verify and choose a partner in Hong Kong (2026 field guide) | it service provider：如何在香港查證並揀選合作夥伴（2026 年指南）" />
-    <meta name="twitter:description" content="A seogeoworks guide to it service provider: how to choose technical partners that keep search and product systems coherent. it service provider 的指南：如何選擇令搜尋與產品系統保持一致的技術夥伴。" />
+    <meta name="twitter:title" content="it service provider: how to verify and choose a partner in…" />
+    <meta name="twitter:description" content="A seogeoworks guide to it service provider: how to choose technical partners that keep search and product systems coherent." />
     <meta name="twitter:image" content="https://www.seogeoworks.hk/og.png" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -55,12 +55,10 @@
   </head>
   <body>
     <div class="wrap">
-      <div class="top"><a href="/">← seogeoworks</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">中文</button><span>Field guide · 2026-09-09</span></div>
+      <div class="top"><a href="/">← seogeoworks</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">中文</button><span>Field guide · 2026-09-10</span></div>
       <div class="eyebrow">seogeoworks / it · IT</div>
-      <h1 data-lang="en">it service provider: how to verify and choose a partner in Hong Kong (2026 field guide)</h1>
-      <h1 data-lang="zh">it service provider：如何在香港查證並揀選合作夥伴（2026 年指南）</h1>
-      <p class="lede" data-lang="en">A seogeoworks guide to it service provider: how to choose technical partners that keep search and product systems coherent.</p>
-      <p class="lede" data-lang="zh">it service provider 的指南：如何選擇令搜尋與產品系統保持一致的技術夥伴。</p>
+      <h1 id="pageTitle" data-en="it service provider: how to verify and choose a partner in Hong Kong (2026 field guide)" data-zh="it service provider：如何在香港查證並揀選合作夥伴（2026 年指南）">it service provider: how to verify and choose a partner in Hong Kong (2026 field guide)</h1>
+      <p class="lede" id="pageLede" data-en="A seogeoworks guide to it service provider: how to choose technical partners that keep search and product systems coherent." data-zh="it service provider 的指南：如何選擇令搜尋與產品系統保持一致的技術夥伴。">A seogeoworks guide to it service provider: how to choose technical partners that keep search and product systems coherent.</p>
       <article>
 <section>
   <h2 data-lang="en">What this page answers</h2>
@@ -108,13 +106,22 @@
     </div>
     <script>
 (function () {
-  var on = false;
-  try { on = localStorage.getItem('sr-lang') === 'zh'; } catch (e) {}
   var btn = document.getElementById('langToggle');
+  var titleEl = document.getElementById('pageTitle');
+  var ledeEl = document.getElementById('pageLede');
+  var primaryZh = document.documentElement.lang === 'zh-Hant';
+  var on = primaryZh;
+  try {
+    var saved = localStorage.getItem('sr-lang');
+    if (saved === 'zh') on = true;
+    if (saved === 'en') on = false;
+  } catch (e) {}
   function apply(zh) {
     document.body.classList.toggle('zh', zh);
     document.documentElement.lang = zh ? 'zh-Hant' : 'en';
     if (btn) btn.textContent = zh ? 'English' : '中文';
+    if (titleEl) titleEl.textContent = titleEl.getAttribute(zh ? 'data-zh' : 'data-en') || titleEl.textContent;
+    if (ledeEl) ledeEl.textContent = ledeEl.getAttribute(zh ? 'data-zh' : 'data-en') || ledeEl.textContent;
     try { localStorage.setItem('sr-lang', zh ? 'zh' : 'en'); } catch (e) {}
   }
   if (btn) btn.addEventListener('click', function () {

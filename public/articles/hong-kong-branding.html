@@ -4,21 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#11120f" />
-    <title>hong kong branding: making brands easier to recognize | hong kong branding：讓品牌更容易被認出</title>
-    <meta name="description" content="A seogeoworks look at hong kong branding: visual systems, brand clarity, and the signals that make a company memorable. Written for teams who want clarity over  hong kong branding 的觀點：視覺系統、品牌清晰度，以及令公司被記住的訊號。" />
+    <title>hong kong branding: making brands easier to recognize</title>
+    <meta name="description" content="A seogeoworks look at hong kong branding: visual systems, brand clarity, and the signals that make a company memorable. Written for teams who want clarity…" />
     <link rel="canonical" href="https://www.seogeoworks.hk/articles/hong-kong-branding.html" />
     <link rel="alternate" hreflang="en" href="https://www.seogeoworks.hk/articles/hong-kong-branding.html" />
-    <link rel="alternate" hreflang="zh-Hant" href="https://www.seogeoworks.hk/articles/hong-kong-branding.html" />
+    <link rel="alternate" hreflang="x-default" href="https://www.seogeoworks.hk/articles/hong-kong-branding.html" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.seogeoworks.hk/sitemap.xml" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="seogeoworks" />
     <meta property="og:url" content="https://www.seogeoworks.hk/articles/hong-kong-branding.html" />
-    <meta property="og:title" content="hong kong branding: making brands easier to recognize | hong kong branding：讓品牌更容易被認出" />
-    <meta property="og:description" content="A seogeoworks look at hong kong branding: visual systems, brand clarity, and the signals that make a company memorable. Written for teams who want clarity over  hong kong branding 的觀點：視覺系統、品牌清晰度，以及令公司被記住的訊號。" />
+    <meta property="og:title" content="hong kong branding: making brands easier to recognize" />
+    <meta property="og:description" content="A seogeoworks look at hong kong branding: visual systems, brand clarity, and the signals that make a company memorable. Written for teams who want clarity…" />
     <meta property="og:image" content="https://www.seogeoworks.hk/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="hong kong branding: making brands easier to recognize | hong kong branding：讓品牌更容易被認出" />
-    <meta name="twitter:description" content="A seogeoworks look at hong kong branding: visual systems, brand clarity, and the signals that make a company memorable. Written for teams who want clarity over  hong kong branding 的觀點：視覺系統、品牌清晰度，以及令公司被記住的訊號。" />
+    <meta name="twitter:title" content="hong kong branding: making brands easier to recognize" />
+    <meta name="twitter:description" content="A seogeoworks look at hong kong branding: visual systems, brand clarity, and the signals that make a company memorable. Written for teams who want clarity…" />
     <meta name="twitter:image" content="https://www.seogeoworks.hk/og.png" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -55,12 +55,10 @@
   </head>
   <body>
     <div class="wrap">
-      <div class="top"><a href="/">← seogeoworks</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">中文</button><span>Field guide · 2026-09-09</span></div>
+      <div class="top"><a href="/">← seogeoworks</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">中文</button><span>Field guide · 2026-09-10</span></div>
       <div class="eyebrow">seogeoworks / design · 設計</div>
-      <h1 data-lang="en">hong kong branding: making brands easier to recognize</h1>
-      <h1 data-lang="zh">hong kong branding：讓品牌更容易被認出</h1>
-      <p class="lede" data-lang="en">A seogeoworks look at hong kong branding: visual systems, brand clarity, and the signals that make a company memorable. Written for teams who want clarity over </p>
-      <p class="lede" data-lang="zh">hong kong branding 的觀點：視覺系統、品牌清晰度，以及令公司被記住的訊號。</p>
+      <h1 id="pageTitle" data-en="hong kong branding: making brands easier to recognize" data-zh="hong kong branding：讓品牌更容易被認出">hong kong branding: making brands easier to recognize</h1>
+      <p class="lede" id="pageLede" data-en="A seogeoworks look at hong kong branding: visual systems, brand clarity, and the signals that make a company memorable. Written for teams who want clarity over " data-zh="hong kong branding 的觀點：視覺系統、品牌清晰度，以及令公司被記住的訊號。">A seogeoworks look at hong kong branding: visual systems, brand clarity, and the signals that make a company memorable. Written for teams who want clarity over </p>
       <article>
 <section>
   <h2 data-lang="en">What this page answers</h2>
@@ -108,13 +106,22 @@
     </div>
     <script>
 (function () {
-  var on = false;
-  try { on = localStorage.getItem('sr-lang') === 'zh'; } catch (e) {}
   var btn = document.getElementById('langToggle');
+  var titleEl = document.getElementById('pageTitle');
+  var ledeEl = document.getElementById('pageLede');
+  var primaryZh = document.documentElement.lang === 'zh-Hant';
+  var on = primaryZh;
+  try {
+    var saved = localStorage.getItem('sr-lang');
+    if (saved === 'zh') on = true;
+    if (saved === 'en') on = false;
+  } catch (e) {}
   function apply(zh) {
     document.body.classList.toggle('zh', zh);
     document.documentElement.lang = zh ? 'zh-Hant' : 'en';
     if (btn) btn.textContent = zh ? 'English' : '中文';
+    if (titleEl) titleEl.textContent = titleEl.getAttribute(zh ? 'data-zh' : 'data-en') || titleEl.textContent;
+    if (ledeEl) ledeEl.textContent = ledeEl.getAttribute(zh ? 'data-zh' : 'data-en') || ledeEl.textContent;
     try { localStorage.setItem('sr-lang', zh ? 'zh' : 'en'); } catch (e) {}
   }
   if (btn) btn.addEventListener('click', function () {
