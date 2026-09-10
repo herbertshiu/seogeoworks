@@ -4,21 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#11120f" />
-    <title>How chatgpt 破解 works — and the legitimate way to use AI tools (Hong Kong guide) | chatgpt 破解 的運作原理——以及合法使用 AI 工具的方法（香港指南）</title>
-    <meta name="description" content="A seogeoworks field guide to chatgpt 破解: context, evaluation criteria, and next steps for operators. Written for teams who want clarity over hype. chatgpt 破解 的實地指南：給營運者的脈絡、評估準則與下一步。" />
+    <title>chatgpt 破解 的運作原理——以及合法使用 AI 工具的方法（香港指南）</title>
+    <meta name="description" content="chatgpt 破解 的實地指南：給營運者的脈絡、評估準則與下一步。" />
     <link rel="canonical" href="https://www.seogeoworks.hk/articles/chatgpt-破解.html" />
-    <link rel="alternate" hreflang="en" href="https://www.seogeoworks.hk/articles/chatgpt-破解.html" />
     <link rel="alternate" hreflang="zh-Hant" href="https://www.seogeoworks.hk/articles/chatgpt-破解.html" />
+    <link rel="alternate" hreflang="x-default" href="https://www.seogeoworks.hk/articles/chatgpt-破解.html" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.seogeoworks.hk/sitemap.xml" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="seogeoworks" />
     <meta property="og:url" content="https://www.seogeoworks.hk/articles/chatgpt-破解.html" />
-    <meta property="og:title" content="How chatgpt 破解 works — and the legitimate way to use AI tools (Hong Kong guide) | chatgpt 破解 的運作原理——以及合法使用 AI 工具的方法（香港指南）" />
-    <meta property="og:description" content="A seogeoworks field guide to chatgpt 破解: context, evaluation criteria, and next steps for operators. Written for teams who want clarity over hype. chatgpt 破解 的實地指南：給營運者的脈絡、評估準則與下一步。" />
+    <meta property="og:title" content="chatgpt 破解 的運作原理——以及合法使用 AI 工具的方法（香港指南）" />
+    <meta property="og:description" content="chatgpt 破解 的實地指南：給營運者的脈絡、評估準則與下一步。" />
     <meta property="og:image" content="https://www.seogeoworks.hk/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="How chatgpt 破解 works — and the legitimate way to use AI tools (Hong Kong guide) | chatgpt 破解 的運作原理——以及合法使用 AI 工具的方法（香港指南）" />
-    <meta name="twitter:description" content="A seogeoworks field guide to chatgpt 破解: context, evaluation criteria, and next steps for operators. Written for teams who want clarity over hype. chatgpt 破解 的實地指南：給營運者的脈絡、評估準則與下一步。" />
+    <meta name="twitter:title" content="chatgpt 破解 的運作原理——以及合法使用 AI 工具的方法（香港指南）" />
+    <meta name="twitter:description" content="chatgpt 破解 的實地指南：給營運者的脈絡、評估準則與下一步。" />
     <meta name="twitter:image" content="https://www.seogeoworks.hk/og.png" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -53,14 +53,12 @@
       footer { margin-top:48px; color:var(--muted); font-size:13px; }
     </style>
   </head>
-  <body>
+  <body class="zh">
     <div class="wrap">
-      <div class="top"><a href="/">← seogeoworks</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">中文</button><span>Field guide · 2026-09-09</span></div>
+      <div class="top"><a href="/">← seogeoworks</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">English</button><span>Field guide · 2026-09-10</span></div>
       <div class="eyebrow">seogeoworks / general · 總覽</div>
-      <h1 data-lang="en">How chatgpt 破解 works — and the legitimate way to use AI tools (Hong Kong guide)</h1>
-      <h1 data-lang="zh">chatgpt 破解 的運作原理——以及合法使用 AI 工具的方法（香港指南）</h1>
-      <p class="lede" data-lang="en">A seogeoworks field guide to chatgpt 破解: context, evaluation criteria, and next steps for operators. Written for teams who want clarity over hype.</p>
-      <p class="lede" data-lang="zh">chatgpt 破解 的實地指南：給營運者的脈絡、評估準則與下一步。</p>
+      <h1 id="pageTitle" data-en="How chatgpt 破解 works — and the legitimate way to use AI tools (Hong Kong guide)" data-zh="chatgpt 破解 的運作原理——以及合法使用 AI 工具的方法（香港指南）">chatgpt 破解 的運作原理——以及合法使用 AI 工具的方法（香港指南）</h1>
+      <p class="lede" id="pageLede" data-en="A seogeoworks field guide to chatgpt 破解: context, evaluation criteria, and next steps for operators. Written for teams who want clarity over hype." data-zh="chatgpt 破解 的實地指南：給營運者的脈絡、評估準則與下一步。">chatgpt 破解 的實地指南：給營運者的脈絡、評估準則與下一步。</p>
       <article>
 <section>
   <h2 data-lang="en">What this page answers</h2>
@@ -102,13 +100,22 @@
     </div>
     <script>
 (function () {
-  var on = false;
-  try { on = localStorage.getItem('sr-lang') === 'zh'; } catch (e) {}
   var btn = document.getElementById('langToggle');
+  var titleEl = document.getElementById('pageTitle');
+  var ledeEl = document.getElementById('pageLede');
+  var primaryZh = document.documentElement.lang === 'zh-Hant';
+  var on = primaryZh;
+  try {
+    var saved = localStorage.getItem('sr-lang');
+    if (saved === 'zh') on = true;
+    if (saved === 'en') on = false;
+  } catch (e) {}
   function apply(zh) {
     document.body.classList.toggle('zh', zh);
     document.documentElement.lang = zh ? 'zh-Hant' : 'en';
     if (btn) btn.textContent = zh ? 'English' : '中文';
+    if (titleEl) titleEl.textContent = titleEl.getAttribute(zh ? 'data-zh' : 'data-en') || titleEl.textContent;
+    if (ledeEl) ledeEl.textContent = ledeEl.getAttribute(zh ? 'data-zh' : 'data-en') || ledeEl.textContent;
     try { localStorage.setItem('sr-lang', zh ? 'zh' : 'en'); } catch (e) {}
   }
   if (btn) btn.addEventListener('click', function () {
