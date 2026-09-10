@@ -17,6 +17,7 @@ import re
 import unicodedata
 from datetime import date
 from pathlib import Path
+from urllib.parse import quote, urlsplit, urlunsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 KEYWORDS_FILE = ROOT / "keywords.txt"
@@ -78,6 +79,28 @@ def seed(keyword: str) -> int:
 
 def escape(s: str) -> str:
     return html.escape(s, quote=True)
+
+
+def clip(text: str, limit: int) -> str:
+    text = text.strip()
+    if len(text) <= limit:
+        return text
+    cut = text[: max(0, limit - 1)].rstrip(" —-:|,.")
+    return cut + "…"
+
+
+def encode_sitemap_url(url: str) -> str:
+    """Percent-encode non-ASCII path segments so crawlers match sitemap locs."""
+    parts = urlsplit(url)
+    return urlunsplit((parts.scheme, parts.netloc, quote(parts.path, safe="/"), parts.query, parts.fragment))
+
+
+def primary_title(keyword: str, category: str) -> str:
+    return title_zh_for(keyword, category) if is_cjk(keyword) else title_for(keyword, category)
+
+
+def primary_description(keyword: str, category: str) -> str:
+    return description_zh_for(keyword, category) if is_cjk(keyword) else description_for(keyword, category)
 
 
 # ---------------------------------------------------------------------------
@@ -1149,13 +1172,22 @@ def body_sections(keyword: str, category: str) -> list[dict]:
 
 TOGGLE_JS = """<script>
 (function () {
-  var on = false;
-  try { on = localStorage.getItem('sr-lang') === 'zh'; } catch (e) {}
   var btn = document.getElementById('langToggle');
+  var titleEl = document.getElementById('pageTitle');
+  var ledeEl = document.getElementById('pageLede');
+  var primaryZh = document.documentElement.lang === 'zh-Hant';
+  var on = primaryZh;
+  try {
+    var saved = localStorage.getItem('sr-lang');
+    if (saved === 'zh') on = true;
+    if (saved === 'en') on = false;
+  } catch (e) {}
   function apply(zh) {
     document.body.classList.toggle('zh', zh);
     document.documentElement.lang = zh ? 'zh-Hant' : 'en';
     if (btn) btn.textContent = zh ? 'English' : '中文';
+    if (titleEl) titleEl.textContent = titleEl.getAttribute(zh ? 'data-zh' : 'data-en') || titleEl.textContent;
+    if (ledeEl) ledeEl.textContent = ledeEl.getAttribute(zh ? 'data-zh' : 'data-en') || ledeEl.textContent;
     try { localStorage.setItem('sr-lang', zh ? 'zh' : 'en'); } catch (e) {}
   }
   if (btn) btn.addEventListener('click', function () {
@@ -1172,6 +1204,8 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
     title_zh = title_zh_for(keyword, category)
     description = description_for(keyword, category)
     description_zh = description_zh_for(keyword, category)
+    meta_title = clip(primary_title(keyword, category), 60)
+    meta_desc = clip(primary_description(keyword, category), 155)
     sections = body_sections(keyword, category)
     related_html = "".join(
         f'<li><a href="/articles/{escape(rslug)}.html">{escape(rkw)}</a></li>' for rkw, rslug in related
@@ -1189,29 +1223,34 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
             "</section>\n"
         )
 
-    lang = "zh-Hant" if is_cjk(keyword) else "en"
+    primary_lang = "zh-Hant" if is_cjk(keyword) else "en"
+    hreflang = "zh-Hant" if is_cjk(keyword) else "en"
+    default_title = title_zh if is_cjk(keyword) else title
+    default_desc = description_zh if is_cjk(keyword) else description
+    body_class = ' class="zh"' if is_cjk(keyword) else ""
+    # Canonical path must keep raw slug for file serving; sitemap encodes separately.
     canonical = f"https://www.seogeoworks.hk/articles/{escape(slug)}.html"
     return f"""<!doctype html>
-<html lang="{lang}">
+<html lang="{primary_lang}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#11120f" />
-    <title>{escape(title)} | {escape(title_zh)}</title>
-    <meta name="description" content="{escape(description)} {escape(description_zh)}" />
+    <title>{escape(meta_title)}</title>
+    <meta name="description" content="{escape(meta_desc)}" />
     <link rel="canonical" href="{canonical}" />
-    <link rel="alternate" hreflang="en" href="{canonical}" />
-    <link rel="alternate" hreflang="zh-Hant" href="{canonical}" />
+    <link rel="alternate" hreflang="{hreflang}" href="{canonical}" />
+    <link rel="alternate" hreflang="x-default" href="{canonical}" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.seogeoworks.hk/sitemap.xml" />
     <meta property="og:type" content="article" />
     <meta property="og:site_name" content="seogeoworks" />
     <meta property="og:url" content="{canonical}" />
-    <meta property="og:title" content="{escape(title)} | {escape(title_zh)}" />
-    <meta property="og:description" content="{escape(description)} {escape(description_zh)}" />
+    <meta property="og:title" content="{escape(meta_title)}" />
+    <meta property="og:description" content="{escape(meta_desc)}" />
     <meta property="og:image" content="https://www.seogeoworks.hk/og.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{escape(title)} | {escape(title_zh)}" />
-    <meta name="twitter:description" content="{escape(description)} {escape(description_zh)}" />
+    <meta name="twitter:title" content="{escape(meta_title)}" />
+    <meta name="twitter:description" content="{escape(meta_desc)}" />
     <meta name="twitter:image" content="https://www.seogeoworks.hk/og.png" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -1246,14 +1285,12 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
       footer {{ margin-top:48px; color:var(--muted); font-size:13px; }}
     </style>
   </head>
-  <body>
+  <body{body_class}>
     <div class="wrap">
-      <div class="top"><a href="/">← seogeoworks</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">中文</button><span>Field guide · {TODAY}</span></div>
+      <div class="top"><a href="/">← seogeoworks</a><button id="langToggle" type="button" aria-label="切換語言 / toggle language">{"English" if is_cjk(keyword) else "中文"}</button><span>Field guide · {TODAY}</span></div>
       <div class="eyebrow">seogeoworks / {escape(category)} · {escape(CATEGORY_ZH.get(category, category))}</div>
-      <h1 data-lang="en">{escape(title)}</h1>
-      <h1 data-lang="zh">{escape(title_zh)}</h1>
-      <p class="lede" data-lang="en">{escape(description)}</p>
-      <p class="lede" data-lang="zh">{escape(description_zh)}</p>
+      <h1 id="pageTitle" data-en="{escape(title)}" data-zh="{escape(title_zh)}">{escape(default_title)}</h1>
+      <p class="lede" id="pageLede" data-en="{escape(description)}" data-zh="{escape(description_zh)}">{escape(default_desc)}</p>
       <article>
 {section_html}
       </article>
@@ -1281,14 +1318,26 @@ def write_index(entries: list[dict]) -> None:
         f'<span>{escape(e["title"])} · <span lang="zh-Hant">{escape(e["title_zh"])}</span></span></a></li>'
         for e in entries
     )
+    index_title = "Field guides — seogeoworks"
+    index_desc = "Bilingual (English / 繁體中文) field guides on SEO, GEO, KOL, and marketing for Hong Kong operators."
     html_doc = f"""<!doctype html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>實地指南 Field guides — seogeoworks</title>
-  <meta name="description" content="seogeoworks bilingual (English / 繁體中文) field guides on SEO, GEO, KOL, marketing, and the operators reshaping how brands get found. 廣東話及英文雙語指南。" />
+  <title>{escape(index_title)}</title>
+  <meta name="description" content="{escape(index_desc)}" />
   <link rel="canonical" href="https://www.seogeoworks.hk/articles/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="seogeoworks" />
+  <meta property="og:url" content="https://www.seogeoworks.hk/articles/" />
+  <meta property="og:title" content="{escape(index_title)}" />
+  <meta property="og:description" content="{escape(index_desc)}" />
+  <meta property="og:image" content="https://www.seogeoworks.hk/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{escape(index_title)}" />
+  <meta name="twitter:description" content="{escape(index_desc)}" />
+  <meta name="twitter:image" content="https://www.seogeoworks.hk/og.png" />
   <link rel="icon" href="/favicon.ico" />
   <script src="https://analytics.ahrefs.com/analytics.js" data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>
   <style>
@@ -1324,7 +1373,7 @@ def write_sitemap(entries: list[dict]) -> None:
     for e in entries:
         urls.append((f"https://www.seogeoworks.hk/articles/{e['slug']}.html", "0.7"))
     body = "\n".join(
-        f"  <url><loc>{u}</loc><lastmod>{TODAY}</lastmod><changefreq>weekly</changefreq><priority>{p}</priority></url>"
+        f"  <url><loc>{encode_sitemap_url(u)}</loc><lastmod>{TODAY}</lastmod><changefreq>weekly</changefreq><priority>{p}</priority></url>"
         for u, p in urls
     )
     SITEMAP.write_text(
