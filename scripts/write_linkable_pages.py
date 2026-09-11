@@ -147,7 +147,7 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
         <li>Browse <a href="/articles/">field guides</a> when you are comparing partners, pricing models, or category terms.</li>
       </ul>
       <h2>Related practice</h2>
-      <p>seogeoworks is editorially independent. For hands-on SEO / GEO consulting, see <a href="https://www.seogeoconsulting.hk/" rel="noopener">seogeoconsulting.hk</a>. For full-service digital marketing and IT delivery in Hong Kong and the Greater Bay Area, see <a href="https://itehk.com.hk/" rel="noopener">itehk.com.hk</a>.</p>
+      <p>seogeoworks is editorially independent. For hands-on SEO / GEO consulting, see <a href="https://www.seogeoconsulting.hk/" rel="noopener">seogeoconsulting.hk</a>. For a Hong Kong field guide to search and AI visibility, see <a href="https://www.mysearchvisibility.hk/" rel="noopener">mysearchvisibility.hk</a>. For full-service digital marketing and IT delivery in Hong Kong and the Greater Bay Area, see <a href="https://itehk.com.hk/" rel="noopener">itehk.com.hk</a>.</p>
       <h2>Editorial standard</h2>
       <p>We prefer named definitions, verifiable checks, and explicit limits. Illustrative composites are labelled as such. When a page is updated, the date appears in the header.</p>
 """,
@@ -176,6 +176,7 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
       <h2>Consulting &amp; delivery</h2>
       <ul>
         <li>SEO / GEO consulting: <a href="https://www.seogeoconsulting.hk/" rel="noopener">seogeoconsulting.hk</a></li>
+        <li>Search visibility field guide: <a href="https://www.mysearchvisibility.hk/" rel="noopener">mysearchvisibility.hk</a></li>
         <li>Digital marketing &amp; IT: <a href="https://itehk.com.hk/" rel="noopener">itehk.com.hk</a> · <a href="mailto:info@itehk.com.hk">info@itehk.com.hk</a></li>
       </ul>
       <h2>Linking &amp; citation</h2>

@@ -1376,8 +1376,8 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
         </ul>
       </aside>
       <footer>
-        <p data-lang="en">© {date.today().year} seogeoworks. <a href="/">Home</a> · <a href="/about/">About</a> · <a href="/resources/">Resources</a> · <a href="/articles/">All guides</a> · <a href="/contact/">Contact</a> · <a href="https://www.seogeoconsulting.hk/" rel="noopener">Consulting</a> · <a href="https://itehk.com.hk/" rel="noopener">Itehk</a></p>
-        <p data-lang="zh">© {date.today().year} seogeoworks。<a href="/">主頁</a> · <a href="/about/">關於</a> · <a href="/resources/">資源</a> · <a href="/articles/">全部指南</a> · <a href="/contact/">聯絡</a> · <a href="https://www.seogeoconsulting.hk/" rel="noopener">顧問</a> · <a href="https://itehk.com.hk/" rel="noopener">Itehk</a></p>
+        <p data-lang="en">© {date.today().year} seogeoworks. <a href="/">Home</a> · <a href="/about/">About</a> · <a href="/resources/">Resources</a> · <a href="/articles/">All guides</a> · <a href="/contact/">Contact</a> · <a href="https://www.seogeoconsulting.hk/" rel="noopener">Consulting</a> · <a href="https://www.mysearchvisibility.hk/" rel="noopener">My Search / Visibility</a> · <a href="https://itehk.com.hk/" rel="noopener">Itehk</a></p>
+        <p data-lang="zh">© {date.today().year} seogeoworks。<a href="/">主頁</a> · <a href="/about/">關於</a> · <a href="/resources/">資源</a> · <a href="/articles/">全部指南</a> · <a href="/contact/">聯絡</a> · <a href="https://www.seogeoconsulting.hk/" rel="noopener">顧問</a> · <a href="https://www.mysearchvisibility.hk/" rel="noopener">My Search / Visibility</a> · <a href="https://itehk.com.hk/" rel="noopener">Itehk</a></p>
       </footer>
     </div>
     {TOGGLE_JS}
