@@ -1221,6 +1221,38 @@ TOGGLE_JS = """<script>
 </script>"""
 
 
+def _tokens(text: str) -> set[str]:
+    return {t for t in re.findall(r"[a-z0-9]+|[\u4e00-\u9fff]+", text.lower()) if len(t) > 1}
+
+
+def pick_related(keyword: str, slug_map: dict[str, str], limit: int = 3) -> list[tuple[str, str]]:
+    """Prefer same-category guides with shared tokens over modular offsets."""
+    category = categorize(keyword)
+    own = _tokens(keyword)
+    scored: list[tuple[int, str, str]] = []
+    for other, slug in slug_map.items():
+        if other == keyword:
+            continue
+        score = 0
+        if categorize(other) == category:
+            score += 10
+        score += len(own & _tokens(other)) * 3
+        scored.append((score, other, slug))
+    scored.sort(key=lambda row: (-row[0], row[1]))
+    picked = [(kw, slug) for score, kw, slug in scored[:limit] if score > 0]
+    if len(picked) >= limit:
+        return picked[:limit]
+    # Fill remaining slots with highest remaining scores (even if 0).
+    seen = {kw for kw, _ in picked}
+    for _, kw, slug in scored:
+        if kw in seen:
+            continue
+        picked.append((kw, slug))
+        if len(picked) >= limit:
+            break
+    return picked[:limit]
+
+
 def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> str:
     category = categorize(keyword)
     title = title_for(keyword, category)
@@ -1253,6 +1285,22 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
     body_class = ' class="zh"' if is_cjk(keyword) else ""
     # Canonical path must keep raw slug for file serving; sitemap encodes separately.
     canonical = f"https://www.seogeoworks.hk/articles/{escape(slug)}.html"
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": meta_title,
+        "description": meta_desc,
+        "datePublished": TODAY,
+        "dateModified": TODAY,
+        "inLanguage": primary_lang,
+        "mainEntityOfPage": canonical,
+        "author": {"@id": "https://www.seogeoworks.hk/#organization"},
+        "publisher": {"@id": "https://www.seogeoworks.hk/#organization"},
+        "isPartOf": {"@id": "https://www.seogeoworks.hk/#website"},
+        "about": keyword,
+        "articleSection": category,
+    }
+    schema_json = json.dumps(schema, ensure_ascii=False, indent=2)
     return f"""<!doctype html>
 <html lang="{primary_lang}">
   <head>
@@ -1280,6 +1328,9 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
+    <script type="application/ld+json">
+{schema_json}
+    </script>
     <script src="https://analytics.ahrefs.com/analytics.js" data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>
     <style>
       :root {{ --bg:#11120f; --ink:#f4f1ea; --muted:#b0b2a7; --lime:#d5f7ac; --line:#2a2d26; }}
@@ -1325,8 +1376,8 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
         </ul>
       </aside>
       <footer>
-        <p data-lang="en">© {date.today().year} seogeoworks. <a href="/">Home</a> · <a href="/articles/">All guides</a> · <a href="/sitemap.xml">Sitemap</a></p>
-        <p data-lang="zh">© {date.today().year} seogeoworks。<a href="/">主頁</a> · <a href="/articles/">全部指南</a> · <a href="/sitemap.xml">Sitemap</a></p>
+        <p data-lang="en">© {date.today().year} seogeoworks. <a href="/">Home</a> · <a href="/about/">About</a> · <a href="/resources/">Resources</a> · <a href="/articles/">All guides</a> · <a href="/contact/">Contact</a> · <a href="https://www.seogeoconsulting.hk/" rel="noopener">Consulting</a> · <a href="https://itehk.com.hk/" rel="noopener">Itehk</a></p>
+        <p data-lang="zh">© {date.today().year} seogeoworks。<a href="/">主頁</a> · <a href="/about/">關於</a> · <a href="/resources/">資源</a> · <a href="/articles/">全部指南</a> · <a href="/contact/">聯絡</a> · <a href="https://www.seogeoconsulting.hk/" rel="noopener">顧問</a> · <a href="https://itehk.com.hk/" rel="noopener">Itehk</a></p>
       </footer>
     </div>
     {TOGGLE_JS}
@@ -1388,16 +1439,87 @@ def write_index(entries: list[dict]) -> None:
     (ARTICLES_DIR / "index.html").write_text(html_doc, encoding="utf-8")
 
 
-def write_sitemap(entries: list[dict]) -> None:
+def write_topic_hubs(entries: list[dict]) -> list[tuple[str, str, str]]:
+    """Write /topics/{category}/ hubs. Returns label/href/blurb for resources index."""
+    by_cat: dict[str, list[dict]] = {}
+    for e in entries:
+        by_cat.setdefault(e["category"], []).append(e)
+
+    hubs: list[tuple[str, str, str]] = []
+    topics_root = ROOT / "public" / "topics"
+    for category, items in sorted(by_cat.items(), key=lambda kv: (-len(kv[1]), kv[0])):
+        label = category.upper() if category != "general" else "General"
+        label_zh = CATEGORY_ZH.get(category, category)
+        href = f"/topics/{category}/"
+        blurb = f"{len(items)} bilingual field guides · {label_zh}"
+        hubs.append((f"{label} field guides", href, blurb))
+        lis = "\n".join(
+            f'<li><a href="/articles/{escape(e["slug"])}.html"><strong>{escape(e["keyword"])}</strong>'
+            f'<span>{escape(e["title"])}</span></a></li>'
+            for e in sorted(items, key=lambda x: x["keyword"].lower())[:80]
+        )
+        html_doc = f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{escape(label)} field guides — seogeoworks</title>
+  <meta name="description" content="{escape(f'Bilingual {label} field guides from seogeoworks for Hong Kong operators.')}" />
+  <link rel="canonical" href="https://www.seogeoworks.hk{href}" />
+  <meta property="og:title" content="{escape(label)} field guides — seogeoworks" />
+  <meta property="og:description" content="{escape(blurb)}" />
+  <meta property="og:url" content="https://www.seogeoworks.hk{href}" />
+  <meta property="og:image" content="https://www.seogeoworks.hk/og.png" />
+  <link rel="icon" href="/favicon.ico" />
+  <script src="https://analytics.ahrefs.com/analytics.js" data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>
+  <style>
+    body{{margin:0;background:#11120f;color:#f4f1ea;font:16px/1.5 "DM Sans",sans-serif}}
+    .wrap{{max-width:900px;margin:0 auto;padding:28px 6vw 80px}}
+    a{{color:#d5f7ac;text-decoration:none}}
+    h1{{font:700 42px/1.1 "Playfair Display",serif}}
+    ul{{list-style:none;padding:0;margin:30px 0;display:grid;gap:12px}}
+    li a{{display:grid;gap:4px;padding:14px 0;border-bottom:1px solid #2a2d26}}
+    span{{color:#b0b2a7;font-size:14px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p><a href="/">← seogeoworks</a> · <a href="/articles/">All guides</a> · <a href="/resources/">Resources</a></p>
+    <h1>{escape(label)} · {escape(label_zh)}</h1>
+    <p>{escape(blurb)}. Topical hubs help search systems understand how our guides connect.</p>
+    <ul>
+      {lis}
+    </ul>
+  </div>
+</body>
+</html>
+"""
+        out = topics_root / category / "index.html"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(html_doc, encoding="utf-8")
+    return hubs
+
+
+def write_sitemap(entries: list[dict], extra_urls: list[tuple[str, str]] | None = None) -> None:
     urls = [
         ("https://www.seogeoworks.hk/", "1.0"),
         ("https://www.seogeoworks.hk/articles/", "0.9"),
     ]
+    if extra_urls:
+        urls.extend(extra_urls)
     for e in entries:
         urls.append((f"https://www.seogeoworks.hk/articles/{e['slug']}.html", "0.7"))
+    # de-dupe while preserving order
+    seen: set[str] = set()
+    ordered: list[tuple[str, str]] = []
+    for u, p in urls:
+        if u in seen:
+            continue
+        seen.add(u)
+        ordered.append((u, p))
     body = "\n".join(
         f"  <url><loc>{encode_sitemap_url(u)}</loc><lastmod>{TODAY}</lastmod><changefreq>weekly</changefreq><priority>{p}</priority></url>"
-        for u, p in urls
+        for u, p in ordered
     )
     SITEMAP.write_text(
         f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n',
@@ -1406,6 +1528,8 @@ def write_sitemap(entries: list[dict]) -> None:
 
 
 def main() -> None:
+    from write_linkable_pages import write_all as write_linkable
+
     ARTICLES_DIR.mkdir(parents=True, exist_ok=True)
     keywords = [k.strip() for k in KEYWORDS_FILE.read_text(encoding="utf-8").splitlines() if k.strip()]
     # unique slug map
@@ -1422,15 +1546,9 @@ def main() -> None:
         slug_map[kw] = slug
 
     entries: list[dict] = []
-    kw_list = list(slug_map.keys())
-    for i, kw in enumerate(kw_list):
-        slug = slug_map[kw]
-        related = []
-        for j in range(1, 4):
-            rk = kw_list[(i + j * 17) % len(kw_list)]
-            if rk != kw:
-                related.append((rk, slug_map[rk]))
-        html_doc = render_article(kw, slug, related[:3])
+    for kw, slug in slug_map.items():
+        related = pick_related(kw, slug_map, limit=3)
+        html_doc = render_article(kw, slug, related)
         (ARTICLES_DIR / f"{slug}.html").write_text(html_doc, encoding="utf-8")
         category = categorize(kw)
         entries.append(
@@ -1444,9 +1562,12 @@ def main() -> None:
         )
 
     write_index(entries)
-    write_sitemap(entries)
+    hubs = write_topic_hubs(entries)
+    authority_urls = write_linkable(hubs)
+    topic_urls = [(f"https://www.seogeoworks.hk{href}", "0.75") for _, href, _ in hubs]
+    write_sitemap(entries, authority_urls + topic_urls)
     MANIFEST.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"generated {len(entries)} articles")
+    print(f"generated {len(entries)} articles + {len(authority_urls)} authority URLs + {len(hubs)} topic hubs")
 
 
 if __name__ == "__main__":

@@ -125,3 +125,6 @@ body, .site-header, .hero-visual, .comparison-section, .assessment-section, .aud
 /* Global language selector */
 .language-switcher { display: inline-flex; align-items: center; gap: 5px; padding: 6px 8px; border: 1px solid var(--line); color: var(--muted); }.language-switcher svg { color: var(--lime); }.language-switcher select { border: 0; outline: 0; color: var(--ink); background: transparent; font: 10px "DM Mono", monospace; letter-spacing: .04em; }.language-switcher option { color: #1c2418; background: #eff3ea; } :root[data-theme="light"] .language-switcher option { color: #1c2418; background: #eff3ea; }
 @media (max-width: 800px) { .language-switcher { padding: 5px 6px; }.language-switcher select { max-width: 38px; }.language-switcher svg { width: 13px; } }
+
+.note-row,.research-card{color:inherit;text-decoration:none;}
+a.button-primary{text-decoration:none;}
