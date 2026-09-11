@@ -14,6 +14,15 @@ seogeoworks helps operators understand the gap between traditional SEO (being se
 - Field notes and research desk briefings for modern search
 - Practical field guides for marketing, KOL, IT, and discovery queries
 
+## Citeable resources
+
+- [SEO vs GEO](https://www.seogeoworks.hk/resources/seo-vs-geo.html)
+- [GEO readiness checklist](https://www.seogeoworks.hk/resources/geo-readiness-checklist.html)
+- [How to earn citations](https://www.seogeoworks.hk/resources/how-to-earn-citations.html)
+- [Resources hub](https://www.seogeoworks.hk/resources/)
+- [About](https://www.seogeoworks.hk/about/)
+- [Contact](https://www.seogeoworks.hk/contact/)
+
 ## Field guides
 
 Browse the growing library at [Field guides](https://www.seogeoworks.hk/articles/).
@@ -22,3 +31,10 @@ Browse the growing library at [Field guides](https://www.seogeoworks.hk/articles
 
 - [seogeoworks](https://www.seogeoworks.hk/)
 - [All field guides](https://www.seogeoworks.hk/articles/)
+- [Resources](https://www.seogeoworks.hk/resources/)
+
+## Related practice
+
+- [SEO / GEO Consulting](https://www.seogeoconsulting.hk/)
+- [Search Visibility Guide](https://www.myairanking.hk/)
+- [iTE Limited](https://itehk.com.hk/)
