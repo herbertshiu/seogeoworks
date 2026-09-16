@@ -26,6 +26,21 @@ MANIFEST = ROOT / "public" / "articles" / "manifest.json"
 SITEMAP = ROOT / "public" / "sitemap.xml"
 TODAY = date.today().isoformat()
 
+GTAG_SNIPPET = """    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3R5NL58EYM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-3R5NL58EYM');
+    </script>"""
+
+AHREFS_SNIPPET = (
+    '    <script src="https://analytics.ahrefs.com/analytics.js" '
+    'data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>'
+)
+
 CATEGORY_HINTS = [
     ("seo", ["seo", "sem", "ppc", "google ads", "adwords", "百度", "谷歌", "search engine", "反向連結", "backlink", "收录", "ranking", "排名", "first page", "hkgseo", "you find", "youfind", "search engine optimisation", "search engine optimization"]),
     ("kol", ["kol", "influencer", "意見領袖", "youtuber", "ig ", "ig廣告", "ig自介", "ig個人", "ig 演算法", "ig演算法", "ig落廣告", "ig賣廣告", "ig 放大鏡", "instagram", "tiktok", "微博"]),
@@ -1331,7 +1346,8 @@ def render_article(keyword: str, slug: str, related: list[tuple[str, str]]) -> s
     <script type="application/ld+json">
 {schema_json}
     </script>
-    <script src="https://analytics.ahrefs.com/analytics.js" data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>
+{AHREFS_SNIPPET}
+{GTAG_SNIPPET}
     <style>
       :root {{ --bg:#11120f; --ink:#f4f1ea; --muted:#b0b2a7; --lime:#d5f7ac; --line:#2a2d26; }}
       * {{ box-sizing:border-box; }}
@@ -1413,7 +1429,8 @@ def write_index(entries: list[dict]) -> None:
   <meta name="twitter:description" content="{escape(index_desc)}" />
   <meta name="twitter:image" content="https://www.seogeoworks.hk/og.png" />
   <link rel="icon" href="/favicon.ico" />
-  <script src="https://analytics.ahrefs.com/analytics.js" data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>
+{AHREFS_SNIPPET}
+{GTAG_SNIPPET}
   <style>
     body{{margin:0;background:#11120f;color:#f4f1ea;font:16px/1.5 "DM Sans",sans-serif}}
     .wrap{{max-width:900px;margin:0 auto;padding:28px 6vw 80px}}
@@ -1471,7 +1488,8 @@ def write_topic_hubs(entries: list[dict]) -> list[tuple[str, str, str]]:
   <meta property="og:url" content="https://www.seogeoworks.hk{href}" />
   <meta property="og:image" content="https://www.seogeoworks.hk/og.png" />
   <link rel="icon" href="/favicon.ico" />
-  <script src="https://analytics.ahrefs.com/analytics.js" data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>
+{AHREFS_SNIPPET}
+{GTAG_SNIPPET}
   <style>
     body{{margin:0;background:#11120f;color:#f4f1ea;font:16px/1.5 "DM Sans",sans-serif}}
     .wrap{{max-width:900px;margin:0 auto;padding:28px 6vw 80px}}

@@ -16,6 +16,21 @@ ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / "public"
 TODAY = date.today().isoformat()
 
+GTAG_SNIPPET = """    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3R5NL58EYM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-3R5NL58EYM');
+    </script>"""
+
+AHREFS_SNIPPET = (
+    '    <script src="https://analytics.ahrefs.com/analytics.js" '
+    'data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>'
+)
+
 
 def escape(s: str) -> str:
     return html.escape(s, quote=True)
@@ -85,7 +100,8 @@ def page(
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet" />
-    <script src="https://analytics.ahrefs.com/analytics.js" data-key="uCLpAG8kpc6h2p4Eofk2cg" async></script>
+{AHREFS_SNIPPET}
+{GTAG_SNIPPET}
     <style>{SHELL_CSS}</style>{schema_block}
   </head>
   <body>
