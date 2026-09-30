@@ -1504,7 +1504,7 @@ def write_topic_hubs(entries: list[dict]) -> list[tuple[str, str, str]]:
   <div class="wrap">
     <p><a href="/">← seogeoworks</a> · <a href="/articles/">All guides</a> · <a href="/resources/">Resources</a></p>
     <h1>{escape(label)} · {escape(label_zh)}</h1>
-    <p>{escape(blurb)}. Topical hubs help search systems understand how our guides connect.</p>
+    <p>{escape(blurb)}. Topical hubs help search systems understand how our guides connect.{' Cornerstone: <a href="/resources/bilingual-seo-geo-hong-kong.html">Bilingual SEO &amp; GEO for Hong Kong</a>.' if category == "seo" else ""}</p>
     <ul>
       {lis}
     </ul>

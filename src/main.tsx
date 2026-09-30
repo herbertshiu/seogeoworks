@@ -35,12 +35,14 @@ const experts = [
 ];
 
 const notes = [
+  { tag: "Playbook 05", title: "Hong Kong search is two languages. Treat it that way.", date: "Sep 30, 2026", time: "12 min read", color: "yellow", href: "/resources/bilingual-seo-geo-hong-kong.html" },
   { tag: "Field note 07", title: "The answer engine is not your enemy. Your blandness is.", date: "Sep 02, 2026", time: "6 min read", color: "blue", href: "/resources/how-to-earn-citations.html" },
   { tag: "Playbook 04", title: "How to write a source an AI can confidently cite", date: "Aug 28, 2026", time: "9 min read", color: "yellow", href: "/resources/how-to-earn-citations.html" },
   { tag: "Signal check", title: "Brand demand is moving from clicks to context", date: "Aug 19, 2026", time: "4 min read", color: "pink", href: "/resources/seo-vs-geo.html" },
 ];
 
 const researchPosts = [
+  { category: "SEO / GEO", type: "Playbook", title: "One market, two languages: bilingual SEO and GEO for Hong Kong", excerpt: "How English and Traditional Chinese should be structured so rankings and answer-engine citations do not contradict each other.", date: "Sep 30, 2026", read: "12 min", tone: "research-lime", href: "/resources/bilingual-seo-geo-hong-kong.html" },
   { category: "GEO research", type: "Deep dive", title: "The citation layer: what answer engines need before they trust a brand", excerpt: "A practical field guide to source quality, corroboration, and the signals that turn content into usable context.", date: "Sep 05, 2026", read: "14 min", tone: "research-lime", href: "/resources/how-to-earn-citations.html" },
   { category: "Expert insight", type: "Conversation", title: "Samantha Li on the difference between being visible and being useful", excerpt: "A search strategist on why the best GEO work starts with sharper opinions, not more output.", date: "Sep 01, 2026", read: "8 min", tone: "research-coral", href: "/resources/seo-vs-geo.html" },
   { category: "SEO / GEO", type: "Field note", title: "From keyword clusters to context graphs", excerpt: "What changes when the unit of optimization is no longer the page, but the relationship between ideas.", date: "Aug 25, 2026", read: "11 min", tone: "research-blue", href: "/topics/seo/" },

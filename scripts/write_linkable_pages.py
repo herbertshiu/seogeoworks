@@ -161,6 +161,7 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
         <li>Start with <a href="/resources/seo-vs-geo.html">SEO vs GEO</a> if you need a shared vocabulary with your team.</li>
         <li>Run the <a href="/resources/geo-readiness-checklist.html">GEO readiness checklist</a> before a redesign or content program.</li>
         <li>Browse <a href="/articles/">field guides</a> when you are comparing partners, pricing models, or category terms.</li>
+        <li>Read <a href="/resources/bilingual-seo-geo-hong-kong.html">Bilingual SEO &amp; GEO for Hong Kong</a> before you publish English and Traditional Chinese as if they were the same query.</li>
       </ul>
       <h2>Related practice</h2>
       <p>seogeoworks is editorially independent. For hands-on SEO / GEO consulting, see <a href="https://www.seogeoconsulting.hk/" rel="noopener">seogeoconsulting.hk</a>. For a Hong Kong field guide to search and AI visibility, see <a href="https://www.mysearchvisibility.hk/" rel="noopener">mysearchvisibility.hk</a>. For full-service digital marketing and IT delivery in Hong Kong and the Greater Bay Area, see <a href="https://itehk.com.hk/" rel="noopener">itehk.com.hk</a>.</p>
@@ -231,6 +232,7 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
         <a href="/resources/seo-vs-geo.html"><strong>SEO vs GEO</strong><span>Where ranking and answer inclusion diverge — and what to fix first.</span></a>
         <a href="/resources/geo-readiness-checklist.html"><strong>GEO readiness checklist</strong><span>Nine practical signals you can audit in one working session.</span></a>
         <a href="/resources/how-to-earn-citations.html"><strong>How to earn citations</strong><span>A playbook for becoming a source answer engines can trust.</span></a>
+        <a href="/resources/bilingual-seo-geo-hong-kong.html"><strong>Bilingual SEO &amp; GEO for Hong Kong</strong><span>English and Traditional Chinese: intents, hreflang, and citations that do not contradict each other. 英文與繁體中文。</span></a>
         <a href="/articles/"><strong>All field guides</strong><span>Bilingual Eng/繁 library for marketing, SEO, KOL, and discovery queries.</span></a>
       </div>
       {topic_html}
@@ -272,7 +274,7 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
       <h2>Measurement</h2>
       <p><strong>SEO:</strong> rankings, clicks, conversions. <strong>GEO:</strong> citations, mentions, sentiment, and qualified demand. Traffic can stay flat while influence grows.</p>
       <h2>Next step</h2>
-      <p>Run the <a href="/resources/geo-readiness-checklist.html">GEO readiness checklist</a>, then browse relevant <a href="/articles/">field guides</a>.</p>
+      <p>Run the <a href="/resources/geo-readiness-checklist.html">GEO readiness checklist</a>, read <a href="/resources/bilingual-seo-geo-hong-kong.html">bilingual SEO &amp; GEO for Hong Kong</a> if you publish in English and Traditional Chinese, then browse relevant <a href="/articles/">field guides</a>.</p>
 """,
     )
     urls.append(("https://www.seogeoworks.hk/resources/seo-vs-geo.html", "0.85"))
@@ -348,10 +350,14 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
       <p>Domain Rating and answer inclusion both improve when independent sites reference your expertise. Prioritize relevant partners, industry directories, and media that your buyers already trust — starting with accurate listings and helpful, linkable resources.</p>
       <h2>5. Measure beyond rankings</h2>
       <p>Track citations, brand mentions, assisted demand, and how answer engines describe you. Pair that with classic SEO crawl and ranking health so the system stays complete.</p>
-      <p>Related: <a href="/resources/seo-vs-geo.html">SEO vs GEO</a> · <a href="/resources/geo-readiness-checklist.html">GEO checklist</a></p>
+      <p>Related: <a href="/resources/seo-vs-geo.html">SEO vs GEO</a> · <a href="/resources/geo-readiness-checklist.html">GEO checklist</a> · <a href="/resources/bilingual-seo-geo-hong-kong.html">Bilingual SEO &amp; GEO</a></p>
 """,
     )
     urls.append(("https://www.seogeoworks.hk/resources/how-to-earn-citations.html", "0.85"))
+
+    # Hand-authored bilingual page. Do not regenerate it with page(); the
+    # English/Traditional Chinese toggle and FAQ schema live in the HTML file.
+    urls.append(("https://www.seogeoworks.hk/resources/bilingual-seo-geo-hong-kong.html", "0.85"))
 
     return urls
 

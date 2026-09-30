@@ -13,12 +13,14 @@ seogeoworks helps operators understand the gap between traditional SEO (being se
 - Readiness audits and self-assessments for search visibility systems
 - Field notes and research desk briefings for modern search
 - Practical field guides for marketing, KOL, IT, and discovery queries
+- Bilingual SEO and GEO for Hong Kong: English and Traditional Chinese as separate intents
 
 ## Citeable resources
 
 - [SEO vs GEO](https://www.seogeoworks.hk/resources/seo-vs-geo.html)
 - [GEO readiness checklist](https://www.seogeoworks.hk/resources/geo-readiness-checklist.html)
 - [How to earn citations](https://www.seogeoworks.hk/resources/how-to-earn-citations.html)
+- [Bilingual SEO and GEO for Hong Kong](https://www.seogeoworks.hk/resources/bilingual-seo-geo-hong-kong.html)
 - [Resources hub](https://www.seogeoworks.hk/resources/)
 - [About](https://www.seogeoworks.hk/about/)
 - [Contact](https://www.seogeoworks.hk/contact/)
