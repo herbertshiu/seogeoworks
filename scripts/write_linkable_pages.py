@@ -162,6 +162,7 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
         <li>Run the <a href="/resources/geo-readiness-checklist.html">GEO readiness checklist</a> before a redesign or content program.</li>
         <li>Browse <a href="/articles/">field guides</a> when you are comparing partners, pricing models, or category terms.</li>
         <li>Read <a href="/resources/bilingual-seo-geo-hong-kong.html">Bilingual SEO &amp; GEO for Hong Kong</a> before you publish English and Traditional Chinese as if they were the same query.</li>
+        <li>Use the <a href="/resources/seo-geo-advisory-any-size.html">SEO &amp; GEO advisory for any company size</a> when the team disagrees about what to fix first.</li>
       </ul>
       <h2>Related practice</h2>
       <p>seogeoworks is editorially independent. For hands-on SEO / GEO consulting, see <a href="https://www.seogeoconsulting.hk/" rel="noopener">seogeoconsulting.hk</a>. For a Hong Kong field guide to search and AI visibility, see <a href="https://www.mysearchvisibility.hk/" rel="noopener">mysearchvisibility.hk</a>. For full-service digital marketing and IT delivery in Hong Kong and the Greater Bay Area, see <a href="https://itehk.com.hk/" rel="noopener">itehk.com.hk</a>.</p>
@@ -232,6 +233,7 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
         <a href="/resources/seo-vs-geo.html"><strong>SEO vs GEO</strong><span>Where ranking and answer inclusion diverge — and what to fix first.</span></a>
         <a href="/resources/geo-readiness-checklist.html"><strong>GEO readiness checklist</strong><span>Nine practical signals you can audit in one working session.</span></a>
         <a href="/resources/how-to-earn-citations.html"><strong>How to earn citations</strong><span>A playbook for becoming a source answer engines can trust.</span></a>
+        <a href="/resources/seo-geo-advisory-any-size.html"><strong>SEO &amp; GEO advisory for any company size</strong><span>Five issues that waste budget at every scale, and a 30-day sequence. 任何規模的公司。英文與繁體中文。</span></a>
         <a href="/resources/bilingual-seo-geo-hong-kong.html"><strong>Bilingual SEO &amp; GEO for Hong Kong</strong><span>English and Traditional Chinese: intents, hreflang, and citations that do not contradict each other. 英文與繁體中文。</span></a>
         <a href="/articles/"><strong>All field guides</strong><span>Bilingual Eng/繁 library for marketing, SEO, KOL, and discovery queries.</span></a>
       </div>
@@ -358,6 +360,8 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
     # Hand-authored bilingual page. Do not regenerate it with page(); the
     # English/Traditional Chinese toggle and FAQ schema live in the HTML file.
     urls.append(("https://www.seogeoworks.hk/resources/bilingual-seo-geo-hong-kong.html", "0.85"))
+    # Hand-authored advisory. Do not regenerate it with page().
+    urls.append(("https://www.seogeoworks.hk/resources/seo-geo-advisory-any-size.html", "0.85"))
 
     return urls
 
