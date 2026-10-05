@@ -1481,7 +1481,7 @@ def write_topic_hubs(entries: list[dict]) -> list[tuple[str, str, str]]:
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{escape(label)} field guides — seogeoworks</title>
-  <meta name="description" content="{escape(f'Bilingual {label} field guides from seogeoworks for Hong Kong operators.')}" />
+  <meta name="description" content="{escape(f'Bilingual {label} field guides from seogeoworks for Hong Kong operators. Practical criteria you can verify.')}" />
   <link rel="canonical" href="https://www.seogeoworks.hk{href}" />
   <meta property="og:title" content="{escape(label)} field guides — seogeoworks" />
   <meta property="og:description" content="{escape(blurb)}" />

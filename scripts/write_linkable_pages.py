@@ -243,7 +243,7 @@ def write_all(topic_links: list[tuple[str, str, str]] | None = None) -> list[tup
     page(
         path=PUBLIC / "resources" / "seo-vs-geo.html",
         title="SEO vs GEO: the strategy gap explained | seogeoworks",
-        description="A clear comparison of traditional SEO and generative engine optimization (GEO): outcomes, assets, authority signals, content shape, distribution, and measurement.",
+        description="A clear comparison of SEO and generative engine optimization: outcomes, assets, authority, content shape, distribution, and measurement.",
         canonical="https://www.seogeoworks.hk/resources/seo-vs-geo.html",
         eyebrow="seogeoworks / resources",
         h1="SEO gets you seen. GEO gets you chosen.",
